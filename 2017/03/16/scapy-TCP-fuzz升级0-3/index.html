@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x01 Bug之前呢只是用scapy来单纯的实现tcp握手+s7的简单fuzz,当然只是自己觉得这个方法是可行的,写了两个吧,一个是单纯的用socket的,另一个是scapy,然后我现在发现我的脚本跑着跑着就会出一些小问题,看报错的话问题还是出在握手的时候发生了什么不可预知的错误? 0x02 think我猜测可能是这样的,因为从抓包来看的话,设备对于伪造的数据包返回的RST包并没有想象中的那么">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scapy-TCP-fuzz v0.3">
+<meta property="og:url" content="http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="0x01 Bug之前呢只是用scapy来单纯的实现tcp握手+s7的简单fuzz,当然只是自己觉得这个方法是可行的,写了两个吧,一个是单纯的用socket的,另一个是scapy,然后我现在发现我的脚本跑着跑着就会出一些小问题,看报错的话问题还是出在握手的时候发生了什么不可预知的错误? 0x02 think我猜测可能是这样的,因为从抓包来看的话,设备对于伪造的数据包返回的RST包并没有想象中的那么">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101ac3d3752.jpg">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101b5be678a.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101b5be7b2e.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101b822d5cd.png">
+<meta property="og:updated_time" content="2018-07-11T05:14:12.622Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scapy-TCP-fuzz v0.3">
+<meta name="twitter:description" content="0x01 Bug之前呢只是用scapy来单纯的实现tcp握手+s7的简单fuzz,当然只是自己觉得这个方法是可行的,写了两个吧,一个是单纯的用socket的,另一个是scapy,然后我现在发现我的脚本跑着跑着就会出一些小问题,看报错的话问题还是出在握手的时候发生了什么不可预知的错误? 0x02 think我猜测可能是这样的,因为从抓包来看的话,设备对于伪造的数据包返回的RST包并没有想象中的那么">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/05/08/59101ac3d3752.jpg">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Scapy-TCP-fuzz v0.3</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/03/21/Scapy提速/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/03/07/scapy-TCP交互-奔跑吧fuzz/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&text=Scapy-TCP-fuzz v0.3"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&is_video=false&description=Scapy-TCP-fuzz v0.3"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scapy-TCP-fuzz v0.3&body=Check out this article: http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&name=Scapy-TCP-fuzz v0.3&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Bug"><span class="toc-number">1.</span> <span class="toc-text">0x01 Bug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-think"><span class="toc-number">2.</span> <span class="toc-text">0x02 think</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Solution"><span class="toc-number">3.</span> <span class="toc-text">0x03 Solution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Do-it"><span class="toc-number">4.</span> <span class="toc-text">0x04 Do it.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-Some-supplement"><span class="toc-number">5.</span> <span class="toc-text">0x05 Some supplement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Project-Source-Code"><span class="toc-number">5.1.</span> <span class="toc-text">Project Source Code:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-About-blog"><span class="toc-number">6.</span> <span class="toc-text">0x06 About blog</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Scapy-TCP-fuzz v0.3
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-03-15T16:00:00.000Z" itemprop="datePublished">2017-03-16</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Python/">Python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p><img src="https://ooo.0o0.ooo/2017/05/08/59101ac3d3752.jpg" alt="jack1.jpg"></p>
+<h2 id="0x01-Bug"><a href="#0x01-Bug" class="headerlink" title="0x01 Bug"></a>0x01 Bug</h2><p>之前呢只是用scapy来单纯的实现tcp握手+s7的简单fuzz,当然只是自己觉得这个方法是可行的,写了两个吧,一个是单纯的用socket的,另一个是scapy,然后我现在发现我的脚本跑着跑着就会出一些小问题,看报错的话问题还是出在握手的时候发生了什么不可预知的错误?</p>
+<h2 id="0x02-think"><a href="#0x02-think" class="headerlink" title="0x02 think"></a>0x02 think</h2><p>我猜测可能是这样的,因为从抓包来看的话,设备对于伪造的数据包返回的RST包并没有想象中的那么快,所以在第二轮的发包过程中,接收到了第一轮返回的RST包,所以在这过程中会收到很多keep-alive的数据包,当发包的速度快于回应的速度的时候,积累到一定程度,达到连接上限,然后下一次的连接就自然的失败并且报错了,当然,这只是我猜测的一种情况.</p>
+<h2 id="0x03-Solution"><a href="#0x03-Solution" class="headerlink" title="0x03 Solution"></a>0x03 Solution</h2><ul>
+<li>预想的解决办法:</li>
+</ul>
+<p>结合socket和scapy来同时实现这个fuzz的功能,通过socket来建立连接,而通过scapy来负责伪造发包等功能,这样是否会相对稳定,感觉在一定程度上控制了重连的频率,关于日志记录,还在想一个更好的方式来记录异常信息,但是更想要通过能实时的解析数据包是最好的选择.</p>
+<h2 id="0x04-Do-it"><a href="#0x04-Do-it" class="headerlink" title="0x04 Do it."></a>0x04 Do it.</h2><p>两天后.</p>
+<p>这两天又折腾了另一个版本的fuzz脚本,之前想要通过socket连接,然后获取端口后在利用scapy进行测试,但是尝试了一下之后发现好像有点儿不是很方便,或者说两者的区别没有太明显?</p>
+<p>在上个版本的基础上升级了一下(姑且就当我的折腾是版本的升级吧),在代码中直接添加了scapy的sniff模块来过滤目标IP的数据包,在发送伪造的数据包的下一句执行监听,监听两个数据包即结束监听.</p>
+<blockquote>
+<p>为什么监听两个,当时的设想是可以监听到一个ack和一个rest数据包,但实际代码执行的过程中并没有收到预想中的数据包(sniff到的应该是两个重传包,重传的是设备返回的error code的数据包),所以,同样是有价值的,判断sniff到的两个数据包,可判断伪造数据包的返回状态,丢弃还是记录.</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>需要考虑的一个问题:<br>iptables -A OUTPUT -p tcp –tcp-flags RST RST -j DROP<br>配置丢掉所有的RST包,那么收到RST包之的时候,谁先对其进行处理,是iptables还是wireshark?那么scapy是怎么样的?</li>
+</ul>
+</blockquote>
+<h2 id="0x05-Some-supplement"><a href="#0x05-Some-supplement" class="headerlink" title="0x05 Some supplement"></a>0x05 Some supplement</h2><ul>
+<li>通过analysis来粗略的判断返回结果,并决定是否被记录.</li>
+</ul>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101b5be678a.png" alt="v0.3添加了analysis函数.png"></p>
+<ul>
+<li>sniffer功能没有想象中的快速,也就是返回ack的速度比执行发送之后执行下一条命令的时间要迅速.因为sniff到两个重传包就是最好的例子,当然不排除代码实现很渣导致这个原因.</li>
+</ul>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101b5be7b2e.png" alt="v0.3fuzz函数添加了sniff.png"></p>
+<ul>
+<li>预想中的sniffer应该是单独的一个功能,通过多进程实现?不断发包的同时实时处理接收到返回信息,以此来判断是否需要重连或者继续发包.</li>
+</ul>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101b822d5cd.png" alt="v0.3预想中的sniff函数.png"></p>
+<ul>
+<li>我还想把脚本执行过程中的那些正常情况下命令行的回显都隐藏起来,显得简洁,有报错的时候抛出异常就可以.</li>
+</ul>
+<h3 id="Project-Source-Code"><a href="#Project-Source-Code" class="headerlink" title="Project Source Code:"></a>Project Source Code:</h3><p><a href="https://github.com/yizhimanpadewoniu/FuzzScapy" target="_blank" rel="noopener">https://github.com/yizhimanpadewoniu/FuzzScapy</a></p>
+<h2 id="0x06-About-blog"><a href="#0x06-About-blog" class="headerlink" title="0x06 About blog"></a>0x06 About blog</h2><ul>
+<li>添加了评论功能,虽然我觉得这个功能目前来说确实是很扯淡的.</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-Bug"><span class="toc-number">1.</span> <span class="toc-text">0x01 Bug</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-think"><span class="toc-number">2.</span> <span class="toc-text">0x02 think</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Solution"><span class="toc-number">3.</span> <span class="toc-text">0x03 Solution</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-Do-it"><span class="toc-number">4.</span> <span class="toc-text">0x04 Do it.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-Some-supplement"><span class="toc-number">5.</span> <span class="toc-text">0x05 Some supplement</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Project-Source-Code"><span class="toc-number">5.1.</span> <span class="toc-text">Project Source Code:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x06-About-blog"><span class="toc-number">6.</span> <span class="toc-text">0x06 About blog</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&text=Scapy-TCP-fuzz v0.3"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&is_video=false&description=Scapy-TCP-fuzz v0.3"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scapy-TCP-fuzz v0.3&body=Check out this article: http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&title=Scapy-TCP-fuzz v0.3"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/03/16/scapy-TCP-fuzz升级0-3/&name=Scapy-TCP-fuzz v0.3&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x00 搞事情吧自己想要尝试对S7协议测试,想通过在保证数据包格式正确的情况下,随意构造不真实的数据发送到目的地,一定程度上算是一种模糊测试?额~~~~ 0x01  整 思路    数据包的标识不变,随机生成参数数据,然后通过socket,发送给目标,但是并不能保证每个数据包的内容都是有效的,可能是有很多垃圾内容,所以连接会被RST掉,考虑到这样的情况,只能是不断的重新连接、发包,重复这个过程,">
+<meta name="keywords" content="PythonFuzz">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python socket--Fuzz小脚本折腾记">
+<meta property="og:url" content="http://am4zing.me/2017/02/28/python小脚本折腾记-1/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="0x00 搞事情吧自己想要尝试对S7协议测试,想通过在保证数据包格式正确的情况下,随意构造不真实的数据发送到目的地,一定程度上算是一种模糊测试?额~~~~ 0x01  整 思路    数据包的标识不变,随机生成参数数据,然后通过socket,发送给目标,但是并不能保证每个数据包的内容都是有效的,可能是有很多垃圾内容,所以连接会被RST掉,考虑到这样的情况,只能是不断的重新连接、发包,重复这个过程,">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101f58666f3.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101f6f7fe74.png">
+<meta property="og:updated_time" content="2018-07-11T05:13:58.629Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python socket--Fuzz小脚本折腾记">
+<meta name="twitter:description" content="0x00 搞事情吧自己想要尝试对S7协议测试,想通过在保证数据包格式正确的情况下,随意构造不真实的数据发送到目的地,一定程度上算是一种模糊测试?额~~~~ 0x01  整 思路    数据包的标识不变,随机生成参数数据,然后通过socket,发送给目标,但是并不能保证每个数据包的内容都是有效的,可能是有很多垃圾内容,所以连接会被RST掉,考虑到这样的情况,只能是不断的重新连接、发包,重复这个过程,">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/05/08/59101f58666f3.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>python socket--Fuzz小脚本折腾记</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/03/03/scapy-TCP交互-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/02/21/pktgen工具的使用-壹/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/02/28/python小脚本折腾记-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&text=python socket--Fuzz小脚本折腾记"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&is_video=false&description=python socket--Fuzz小脚本折腾记"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=python socket--Fuzz小脚本折腾记&body=Check out this article: http://am4zing.me/2017/02/28/python小脚本折腾记-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&name=python socket--Fuzz小脚本折腾记&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-搞事情吧"><span class="toc-number">1.</span> <span class="toc-text">0x00 搞事情吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-整"><span class="toc-number">2.</span> <span class="toc-text">0x01  整</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-最终"><span class="toc-number">3.</span> <span class="toc-text">0x02 最终</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        python socket--Fuzz小脚本折腾记
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-02-28T09:12:04.000Z" itemprop="datePublished">2017-02-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/PythonFuzz/">PythonFuzz</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x00-搞事情吧"><a href="#0x00-搞事情吧" class="headerlink" title="0x00 搞事情吧"></a>0x00 搞事情吧</h2><p>自己想要尝试对S7协议测试,想通过在保证数据包格式正确的情况下,随意构造不真实的数据发送到目的地,一定程度上算是一种模糊测试?额~~~~</p>
+<h2 id="0x01-整"><a href="#0x01-整" class="headerlink" title="0x01  整"></a>0x01  整</h2><ul>
+<li>思路  </li>
+</ul>
+<p>数据包的标识不变,随机生成参数数据,然后通过socket,发送给目标,但是并不能保证每个数据包的内容都是有效的,可能是有很多垃圾内容,所以连接会被RST掉,考虑到这样的情况,只能是不断的重新连接、发包,重复这个过程,并且在每执行一次之后ping设备,设置超时之后将该数据包记录到日志文件中,可能此数据包生效.</p>
+<ul>
+<li>编程问题  </li>
+</ul>
+<blockquote>
+<ul>
+<li>自动给个位数补”0”  </li>
+</ul>
+</blockquote>
+<blockquote>
+<pre><code>a = random.randint(0,9)  
+# 括号里的数字表示位数
+b = a.zfill(3)  
+print b  
+</code></pre></blockquote>
+<blockquote>
+<ul>
+<li>怎么生成随机的data部分  </li>
+</ul>
+</blockquote>
+<blockquote>
+<pre><code># 我neargle给的建议  
+neargle = 20  
+print &apos;&apos;.join(random.choice(string.digits) for i in range(neargle))  
+</code></pre></blockquote>
+<blockquote>
+<ul>
+<li>正确生成数据  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>上面随机生成data部分不合理,我应该是随机生成十六进制的字符串是最理想的状态,在网上搜索得到了写的很好的一段代码  </p>
+</blockquote>
+<blockquote>
+<pre><code>def randomString(n):  
+    return (&apos;&apos;.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(n))))[0:16]  
+# 不得不说人家写的真的到位,具体的内容参考连接:[随机生成十六进制字符串](http://blog.csdn.net/amghost/article/details/12883025)  
+</code></pre></blockquote>
+<blockquote>
+<ul>
+<li><strong>这一点很重要</strong>  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>这一点很重要,为什么说他重要,因为我们在wireshark抓包的过程中,看到的其实是:  <strong>十六进制的ascii显示</strong>.  </p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101f58666f3.png" alt="wireshark十六进制ascii显示.png">  </p>
+<blockquote>
+<p>如果通过python传送的数据应该是下面的格式:  </p>
+</blockquote>
+<blockquote>
+<pre><code>\x03\x00\x00\x16\x11\xe0\x00\x00\x00\x12\x00\xc1\x02\x01\x00\xc2\x02\x01\x02  
+</code></pre><p>而不是:  </p>
+</blockquote>
+<blockquote>
+<pre><code>0300001611e00000001200c1020100c2020102  
+</code></pre></blockquote>
+<blockquote>
+<p>这两种方式的显示是一目了然的,后者明显是不会被识别为正常的格式,但是我们生成的是第二种的字符串,我们通过代码转成需要的格式直接发送给目标,中间省略将字符串先转化为”\x00”这样的过程,本来我是不懂得,但是还是找到了我认为比较好的方式,先拿来用了  </p>
+</blockquote>
+<blockquote>
+<pre><code>def str2byte(data):
+    base = &apos;0123456789ABCDEF&apos;
+    i = 0
+    data = data.upper()
+    result = &apos;&apos;
+    while i &lt; len(data):
+        beg = data[i]
+        end = data[i+1]
+        i += 2
+        b1 = base.find(beg)
+        b2 = base.find(end)
+        if b1 == -1 or b2 == -1:
+            return None
+        result += chr((b1 &lt;&lt; 4) + b2)
+    return result  
+</code></pre><p>   当时是参照<a href="https://zhidao.baidu.com/question/1576452206019942660.html" target="_blank" rel="noopener">一篇百度知道的回答</a>  </p>
+</blockquote>
+<h2 id="0x02-最终"><a href="#0x02-最终" class="headerlink" title="0x02 最终"></a>0x02 最终</h2><p>所以,基本解决了上面的问题,今晚就开一整晚,让他自己去跑着测试吧,但是感觉效率还是很低,怎么办呢?暂时想不出来…  </p>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101f6f7fe74.png" alt="运行成功wireshark截图.png"></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-搞事情吧"><span class="toc-number">1.</span> <span class="toc-text">0x00 搞事情吧</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-整"><span class="toc-number">2.</span> <span class="toc-text">0x01  整</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-最终"><span class="toc-number">3.</span> <span class="toc-text">0x02 最终</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/02/28/python小脚本折腾记-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&text=python socket--Fuzz小脚本折腾记"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&is_video=false&description=python socket--Fuzz小脚本折腾记"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=python socket--Fuzz小脚本折腾记&body=Check out this article: http://am4zing.me/2017/02/28/python小脚本折腾记-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&title=python socket--Fuzz小脚本折腾记"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/02/28/python小脚本折腾记-1/&name=python socket--Fuzz小脚本折腾记&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

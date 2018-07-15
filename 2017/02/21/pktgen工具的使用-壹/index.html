@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="##0x01 先说几句我个人觉得这是一次踩坑的过程,之前也没有搞过这个东西,所以即使现在搞起来了,但是我还是不是很清楚到底是什么机制,现在想先把过程记录下来,说不定哪天懵逼的时候还能够帮得上一点点忙?一开始的初衷是想要收集一款tcp的发包工具用来测试自己身边的设备性能,过程中看到了pktgen(linux内核模块),在搜索过程中发现了这篇文章提到的工具,慢慢发现这好像是两个完全不同的东西,pktg">
+<meta name="keywords" content="TCPtools">
+<meta property="og:type" content="article">
+<meta property="og:title" content="pktgen-dpdk的踩坑过程">
+<meta property="og:url" content="http://am4zing.me/2017/02/21/pktgen工具的使用-壹/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="##0x01 先说几句我个人觉得这是一次踩坑的过程,之前也没有搞过这个东西,所以即使现在搞起来了,但是我还是不是很清楚到底是什么机制,现在想先把过程记录下来,说不定哪天懵逼的时候还能够帮得上一点点忙?一开始的初衷是想要收集一款tcp的发包工具用来测试自己身边的设备性能,过程中看到了pktgen(linux内核模块),在搜索过程中发现了这篇文章提到的工具,慢慢发现这好像是两个完全不同的东西,pktg">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591024ba86fad.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591024ba8810c.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591024bb7823c.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591024bb79076.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59102515ee8bb.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591025163ceaf.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59102515ed58d.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591025471c3d7.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59102565ef646.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/591025667fb4d.png">
+<meta property="og:updated_time" content="2018-07-11T05:13:24.840Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="pktgen-dpdk的踩坑过程">
+<meta name="twitter:description" content="##0x01 先说几句我个人觉得这是一次踩坑的过程,之前也没有搞过这个东西,所以即使现在搞起来了,但是我还是不是很清楚到底是什么机制,现在想先把过程记录下来,说不定哪天懵逼的时候还能够帮得上一点点忙?一开始的初衷是想要收集一款tcp的发包工具用来测试自己身边的设备性能,过程中看到了pktgen(linux内核模块),在搜索过程中发现了这篇文章提到的工具,慢慢发现这好像是两个完全不同的东西,pktg">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/05/08/591024ba86fad.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>pktgen-dpdk的踩坑过程</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/02/28/python小脚本折腾记-1/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2016/01/04/Fiddler抓包使用心得/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&text=pktgen-dpdk的踩坑过程"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&is_video=false&description=pktgen-dpdk的踩坑过程"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pktgen-dpdk的踩坑过程&body=Check out this article: http://am4zing.me/2017/02/21/pktgen工具的使用-壹/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&name=pktgen-dpdk的踩坑过程&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-后续的问题"><span class="toc-number">1.</span> <span class="toc-text">0x04 后续的问题</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        pktgen-dpdk的踩坑过程
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-02-21T07:05:15.000Z" itemprop="datePublished">2017-02-21</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/TCPtools/">TCPtools</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>##0x01 先说几句<br>我个人觉得这是一次踩坑的过程,之前也没有搞过这个东西,所以即使现在搞起来了,但是我还是不是很清楚到底是什么机制,现在想先把过程记录下来,说不定哪天懵逼的时候还能够帮得上一点点忙?<br>一开始的初衷是想要收集一款tcp的发包工具用来测试自己身边的设备性能,过程中看到了pktgen(linux内核模块),在搜索过程中发现了这篇文章提到的工具,慢慢发现这好像是两个完全不同的东西,pktgen不支持TCP,pktgen-dpdk是支持TCP的,所以开始尝试着使用这个工具.</p>
+<p>##0x02 开整<br>整个过程都没有百度过别人的技术文档,纯粹参照官方的网站进行一步步操作的,所以可能绕了一些弯路或者怎样,看官们轻喷可好?<br><a href="http://pktgen.readthedocs.io/en/stable/index.html" target="_blank" rel="noopener">官方文档: http://pktgen.readthedocs.io/en/stable/index.html</a></p>
+<p>step 1 环境:  </p>
+<ul>
+<li>使用系统版本: kali 2.0  </li>
+<li>内核版本: 4.9.0-kali1-amd64  </li>
+</ul>
+<p>step 2 操作:</p>
+<ul>
+<li>查看官方文档,需要配置HugePages(会发现可能系统默认已经配置好)  </li>
+<li>Get源码  </li>
+</ul>
+<blockquote>
+<ul>
+<li><p>dpdk源码  </p>
+<p>   git clone git://dpdk.org/dpdk(你会发现失效,什么都没有clone)<br>   正确姿势: 去官网下载安装包 <a href="http://www.dpdk.org/download" target="_blank" rel="noopener">http://www.dpdk.org/download</a><br>   注意安装包版本的选择(我用了稳定版的文件),可能会直接影响到之后的编译过程  </p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>pktgen-dpdk源码  </li>
+</ul>
+</blockquote>
+<blockquote>
+<pre><code>git clone http://dpdk.org/git/apps/pktgen-dpdk
+</code></pre></blockquote>
+<ul>
+<li>安装linux内核头文件以允许DPDK编译自己的模块  </li>
+</ul>
+<blockquote>
+<pre><code>sudo apt-get install linux-headers-3.5.0-32-generic  
+</code></pre></blockquote>
+<ul>
+<li>你可能还需要安装依赖  </li>
+</ul>
+<blockquote>
+<pre><code>sudo apt-get install libpcap-dev  
+</code></pre></blockquote>
+<ul>
+<li>设置环境变量  </li>
+</ul>
+<blockquote>
+<pre><code>export RTE_SDK = /root/GitPro/dpdk(你的dpdk路径)  
+export RTE_TARGET=x86_64-native-linuxapp-gcc  
+</code></pre></blockquote>
+<ul>
+<li>编译dpdk  </li>
+</ul>
+<blockquote>
+<pre><code>cd $RTE_SDK  
+make install T=x86_64-native-linuxapp-gcc  
+过程中出现的问题稍后总结
+Just ignore it.
+</code></pre></blockquote>
+<ul>
+<li>编译pktgen-dpdk  </li>
+</ul>
+<blockquote>
+<pre><code>cd /root/Git/pktgen-dpdk(我的路径)  
+make  
+这里可能会报错,也可能不会,待会儿再说错误  
+</code></pre></blockquote>
+<p>到此为止,再无任何错误的情况下,应该是编译这个过程搞定了,剩下的可能就是一些收尾的配置,到这里先总结几个问题.  </p>
+<p>0x03 编译问题小结  </p>
+<p>这些问题是否出现取决于版本问题  </p>
+<ul>
+<li>Installation cannot run with T defined and DESTDIR undefined  </li>
+</ul>
+<blockquote>
+<p>提示你没有指定安装路径,这里我们只需要编译,本来也不需要安装,所以忽略,不影响使用   </p>
+</blockquote>
+<ul>
+<li>make pktgen error1  </li>
+</ul>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/591024ba86fad.png" alt="RTE_SDK还是之前dpdk的路径_勿修改.png">  </p>
+<blockquote>
+<p>这个错是低级的,因为我改动了RTE_SDK这个参数,改为指定到pktgen的路径,这完全是错误的,这个参数在第一次设置后就不需要修改,路径就是dpdk的路径  </p>
+</blockquote>
+<ul>
+<li>make pktgen error2  </li>
+</ul>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/591024ba8810c.png" alt="make_error2.png">  </p>
+<blockquote>
+<p>注意我的版本,我用了pktgen-dpdk 2.7.6的这个版本,有可能是版本的原因,所以可能是个人的操作的原因吧,自己去官方网站手动的去下载了安装包,直接源码make,所以出了这样或者那样的错误,直接从git克隆那个版本的就ok了,不需要这么麻烦,完成make.  </p>
+</blockquote>
+<p>这里需要附上一张编译成功之后的结果,会在你的路径下生成一个可执行的pktgen的文件,看似好像是成功咯?  </p>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/591024bb7823c.png" alt="编译成功结果.png"></p>
+<h2 id="0x04-后续的问题"><a href="#0x04-后续的问题" class="headerlink" title="0x04 后续的问题"></a>0x04 后续的问题</h2><ul>
+<li>关于setup.sh  </li>
+</ul>
+<blockquote>
+<p>文章中提到,pktgen-dpdk路径下有这样一个文件,会在执行后自动的去完成一些配置,找了半天发现没有这个文件,头疼,要炸了.<br>当时突然想到是不是较低的版本有这个东西,发现确实是这样的,见下图.我直接拿来用了.  </p>
+</blockquote>
+<blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/591024bb79076.png" alt="两个版本的文件数对比.png"></p>
+</blockquote>
+<blockquote>
+<p>当然了,你运行这个脚本会发现你可能还是有错,错误提示是找不到什么文件之类的,是因为clone下来的这个版本他确实没有,所以还是复制一份过来,这下就ok了.试着继续运行setup.sh(截图可能和当时情况有出入,但是先看着,显示的形式基本是这样的)<br><img src="https://ooo.0o0.ooo/2017/05/08/59102515ee8bb.png" alt="网卡要先down掉.png"><br>初次运行setup.sh你可能还会发现没有提示:在dpdk/tools路径下没有dpdk_nic_bind.py文件,和上面的方法一样,去复制一份过来,其他版本里有,这种方法好像很没水平,对于我这种lowB来说好像很适合.23333<br>之后运行setup.sh文件,你可能发现还是有写不对劲的地方,原因是没有绑定自己的网卡,这个文件中有几行代码是用来绑定你的网卡的,打开setup.sh文件你会发现,我们只需要修改其中的点就可以解决了  </p>
+</blockquote>
+<blockquote>
+<p>查看网卡信息:<br><img src="https://ooo.0o0.ooo/2017/05/08/591025163ceaf.png" alt="绑定网卡bind.png">  </p>
+</blockquote>
+<blockquote>
+<p>修改配置文件完成:<br><img src="https://ooo.0o0.ooo/2017/05/08/59102515ed58d.png" alt="绑定网卡修改setup文件.png">  </p>
+</blockquote>
+<blockquote>
+<pre><code>在网卡信息的图片中可以看到:  
+Kernel driver in use: igb_uio(说明网卡已经成功绑定)  
+</code></pre></blockquote>
+<ul>
+<li>初次运行pktgen  </li>
+</ul>
+<blockquote>
+<pre><code>./pktgen -h  
+</code></pre></blockquote>
+<blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/591025471c3d7.png" alt="运行pktgen报错1-找不到pktgen.png"><br>这个问题解决方法是从Github的issue中找到解决方法的,将pktgen的可执行文件,直接拷贝到pktgen-dpdk的根目录下执行,问题就解决了.  </p>
+</blockquote>
+<blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59102565ef646.png" alt="成功运行pktgen.png"><br><img src="https://ooo.0o0.ooo/2017/05/08/591025667fb4d.png" alt="执行pktgen命令1.png">  </p>
+</blockquote>
+<ul>
+<li>绑定网卡  </li>
+</ul>
+<blockquote>
+<p>绑定网卡的时候一定要将网卡down掉,否则setup.sh文件执行的时候会报错.  </p>
+</blockquote>
+<blockquote>
+<pre><code>ifconfig eth0 down  
+</code></pre></blockquote>
+<ul>
+<li>变量设置  </li>
+</ul>
+<blockquote>
+<p>关于RTE_SDK和RTE_TARGET这两个参数,因为每次重新启动之后都需要重新设置,所以你可以将这两个写入到脚本中,系统启动的时候也就设定好了.  </p>
+</blockquote>
+<p>##0x05 写在最后  </p>
+<p>自己测试了一下这个东西,好像他更像是发起Dos攻击的工具,经过dpdk的包全部任何的都发送到目的IP吧,和我想要的还是有些距离,暂时和这个东西,say bye.</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-后续的问题"><span class="toc-number">1.</span> <span class="toc-text">0x04 后续的问题</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&text=pktgen-dpdk的踩坑过程"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&is_video=false&description=pktgen-dpdk的踩坑过程"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=pktgen-dpdk的踩坑过程&body=Check out this article: http://am4zing.me/2017/02/21/pktgen工具的使用-壹/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&title=pktgen-dpdk的踩坑过程"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/02/21/pktgen工具的使用-壹/&name=pktgen-dpdk的踩坑过程&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

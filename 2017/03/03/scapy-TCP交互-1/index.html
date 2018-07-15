@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="至此,我想我可以开始写这篇基于python、scapy的tcp交互的实现了,也许写这样的东西有点儿过时了,因为之前已经有好多人写过相关的东西,但是大家的方向不一样吧,更多的人偏向于写扫描,探测,以及简单的实现三次握手.感觉没有具体的讲某一点我觉得很重要的东西,比如是怎么实现一个完整的交互(当然可能是因为是我搜索的技术有限,没有找到相关的信息). 0x00 环境 kali2.0 Linux Pyth">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Scapy TCP-push to github">
+<meta property="og:url" content="http://am4zing.me/2017/03/03/scapy-TCP交互-1/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="至此,我想我可以开始写这篇基于python、scapy的tcp交互的实现了,也许写这样的东西有点儿过时了,因为之前已经有好多人写过相关的东西,但是大家的方向不一样吧,更多的人偏向于写扫描,探测,以及简单的实现三次握手.感觉没有具体的讲某一点我觉得很重要的东西,比如是怎么实现一个完整的交互(当然可能是因为是我搜索的技术有限,没有找到相关的信息). 0x00 环境 kali2.0 Linux Pyth">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101bc086424.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101be94c42c.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101bfcbecb1.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101c154f8b3.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101c4be07d7.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101c7068ddb.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101c80e7ac1.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101c9dac38c.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101cbc87457.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101ce58e064.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/05/08/59101cf522ad9.png">
+<meta property="og:updated_time" content="2018-07-11T05:14:17.822Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Scapy TCP-push to github">
+<meta name="twitter:description" content="至此,我想我可以开始写这篇基于python、scapy的tcp交互的实现了,也许写这样的东西有点儿过时了,因为之前已经有好多人写过相关的东西,但是大家的方向不一样吧,更多的人偏向于写扫描,探测,以及简单的实现三次握手.感觉没有具体的讲某一点我觉得很重要的东西,比如是怎么实现一个完整的交互(当然可能是因为是我搜索的技术有限,没有找到相关的信息). 0x00 环境 kali2.0 Linux Pyth">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/05/08/59101bc086424.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>Scapy TCP-push to github</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/03/07/scapy-TCP交互-奔跑吧fuzz/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/02/28/python小脚本折腾记-1/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/03/03/scapy-TCP交互-1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&text=Scapy TCP-push to github"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&is_video=false&description=Scapy TCP-push to github"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scapy TCP-push to github&body=Check out this article: http://am4zing.me/2017/03/03/scapy-TCP交互-1/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&name=Scapy TCP-push to github&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-环境"><span class="toc-number">1.</span> <span class="toc-text">0x00 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-TCP三次握手"><span class="toc-number">2.</span> <span class="toc-text">0x01 TCP三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-与设备握手交互"><span class="toc-number">3.</span> <span class="toc-text">0x02 与设备握手交互</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#函数"><span class="toc-number">3.0.1.</span> <span class="toc-text">函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-新的问题"><span class="toc-number">4.</span> <span class="toc-text">0x03 新的问题</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        Scapy TCP-push to github
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2017-03-02T16:00:00.000Z" itemprop="datePublished">2017-03-03</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/Python/">Python</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>至此,我想我可以开始写这篇基于python、scapy的tcp交互的实现了,也许写这样的东西有点儿过时了,因为之前已经有好多人写过相关的东西,但是大家的方向不一样吧,更多的人偏向于写扫描,探测,以及简单的实现三次握手.感觉没有具体的讲某一点我觉得很重要的东西,比如是怎么实现一个完整的交互(当然可能是因为是我搜索的技术有限,没有找到相关的信息).</p>
+<h2 id="0x00-环境"><a href="#0x00-环境" class="headerlink" title="0x00 环境"></a>0x00 环境</h2><ul>
+<li>kali2.0 Linux</li>
+<li>Python 2.7</li>
+<li>scapy 2.33</li>
+<li>Pycharm<br>*</li>
+</ul>
+<h2 id="0x01-TCP三次握手"><a href="#0x01-TCP三次握手" class="headerlink" title="0x01 TCP三次握手"></a>0x01 TCP三次握手</h2><p>三次握手的过程我是从网上在搜索scapy TCP交互实例的时候发现别人写的挺好的,所以直接拿来用了.2333,自己好挫……  </p>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101bc086424.png" alt="TCP三次握手实现代码.png"></p>
+<p>我们通过执行脚本时传入源IP/目的IP/目的端口即可完成建立三次握手,网上很多都有讲到这个实例的实现过程,所以不多赘述.</p>
+<blockquote>
+<p>注意:</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>这里你可能会发现运行结果的wireshark抓包显示连接没有能够正常建立,直接是RST掉了,原因是什么???</li>
+<li>防火墙因为没有发syn包,所以对于回来的ack包直接RST掉了(就像是你没点菜服务员却告诉你你需要确认你刚刚点菜的菜单,所以你肯定是首先RST掉).</li>
+<li><p>这两条命令就是关于这个问题的解决方式,直接配置防火墙丢掉RST包.</p>
+<pre><code>iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROP
+
+iptables -L(查看状态~)
+</code></pre></li>
+</ul>
+</blockquote>
+<h2 id="0x02-与设备握手交互"><a href="#0x02-与设备握手交互" class="headerlink" title="0x02 与设备握手交互"></a>0x02 与设备握手交互</h2><p>因为我自身接触的设备有一个类似于tcp三次握手的建连过程,所以在tcp建连之后还需要一次连接过程,这之间要涉及到ack和seq的问题,是我遇到的问题,不知道熟悉TCP的人会不会也遇到.</p>
+<h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><ul>
+<li>sr()函数拥有在第三层的接收和发送功能,所以我们通过sr()来负责发送接收含有data的数据包</li>
+<li>send()只有发送功能,不管接收,我们可以用来发送ack等包</li>
+</ul>
+<p>我用word做了一个简单的TCP握手和交互的过程:  </p>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101be94c42c.png" alt="模拟握手和交互示例图.png"></p>
+<blockquote>
+<p>我们从过程中可以看出,seq和ack是在不断变化的,我们只针对客户端,我们的seq值和ack值的变化是根据上一个数据包的ack和接收到的data数据的长度来决定</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101bfcbecb1.png" alt="wireshark已经识别了数据长度并计算了下一个ack的值.png"></p>
+<blockquote>
+<p>如图我们可以清楚的看到,seq值和ack的关联以及我们如果计算,那么剩下的就可以通过代码实现.</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101c154f8b3.png" alt="seq值的实现代码.png"></p>
+<blockquote>
+<p>我们通过图片可以看到计算的方式是通过sr()函数接收到的数据包,来计算返回data的长度,以此来确定ack和seq.</p>
+<p>另外,应该还要注意几个参数:</p>
+<ul>
+<li>timeout 和 multi</li>
+</ul>
+</blockquote>
+<blockquote>
+<pre><code>这两个参数可以延长sr()的接收数据包的等待时间,接收足够的answer数据.因为sr()返回的数据格式是tuple类型,如下图.
+</code></pre></blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101c4be07d7.png" alt="scapy收到的元组格式.png"></p>
+<blockquote>
+<p>第二层元组访问数据包数据:</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101c7068ddb.png" alt="scapy查看深层的元组格式.png"></p>
+<blockquote>
+<p>运行程序,在结果中打印一个sr()接收到的answer数据:</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101c80e7ac1.png" alt="scapy打印一个接收到的数据包.png"></p>
+<blockquote>
+<p>wireshark默认对接收到数据的处理,wireshark也计算了返回数据的长度并预算了下一个ack:</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101c9dac38c.png" alt="scapy确定收到数据中元组的返回数据内容和长度.png"></p>
+<p>这几张截图很关键,因为没有更好的显示方式,这里其实出现了一个问题,也就是我上面提到的要用timeout和multi这两个参数的原因,因为如果不设置等待的时间,那么我当前要测试的设备首先返回的是一个ack包而不是真正的数据包,所以等待时间不够是无法接收到真实数据并确定合理的ack和seq值.</p>
+<p>做不到的话那么肯定是畸形数据包了,不会被接受并一直等待响应.</p>
+<ul>
+<li>解决办法</li>
+</ul>
+<blockquote>
+<ul>
+<li>笨办法<br>连续发包两次,第一个请求返回ack包后马上发第二个包,可以得到正确返回值<br><img src="https://ooo.0o0.ooo/2017/05/08/59101cbc87457.png" alt="同一个数据包发送两次.png"></li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>相对较好的解决办法<br>设置足够的等待时间,然后遍历所有的数据包,从中去获得真实的返回数据的数据包.</li>
+</ul>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101ce58e064.png" alt="scapy发包命令行过程.png"></p>
+<p><img src="https://ooo.0o0.ooo/2017/05/08/59101cf522ad9.png" alt="scapy第一次完整的运行.png"></p>
+<h2 id="0x03-新的问题"><a href="#0x03-新的问题" class="headerlink" title="0x03 新的问题"></a>0x03 新的问题</h2><p>在接收到畸形数据之后,目标直接返回RST,但是并没有在sr之中得到一个真实的返回数据,也就是说没有返回任何东西,只有一个ack,所以下一步怎么处理RST需要考虑一下?</p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00-环境"><span class="toc-number">1.</span> <span class="toc-text">0x00 环境</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-TCP三次握手"><span class="toc-number">2.</span> <span class="toc-text">0x01 TCP三次握手</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-与设备握手交互"><span class="toc-number">3.</span> <span class="toc-text">0x02 与设备握手交互</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#函数"><span class="toc-number">3.0.1.</span> <span class="toc-text">函数</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-新的问题"><span class="toc-number">4.</span> <span class="toc-text">0x03 新的问题</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2017/03/03/scapy-TCP交互-1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&text=Scapy TCP-push to github"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&is_video=false&description=Scapy TCP-push to github"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=Scapy TCP-push to github&body=Check out this article: http://am4zing.me/2017/03/03/scapy-TCP交互-1/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&title=Scapy TCP-push to github"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2017/03/03/scapy-TCP交互-1/&name=Scapy TCP-push to github&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'cactus-1';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

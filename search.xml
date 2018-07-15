@@ -3,11 +3,199 @@
   
     
     <entry>
-      <title>Hello World</title>
-      <link href="/2018/07/15/hello-world/"/>
-      <url>/2018/07/15/hello-world/</url>
-      <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>]]></content>
+      <title>【漫谈-转】Unix Permissions</title>
+      <link href="/2018/07/15/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/"/>
+      <url>/2018/07/15/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Unix-Permissions"><a href="#0×00-Unix-Permissions" class="headerlink" title="0×00 Unix Permissions"></a>0×00 Unix Permissions</h2><p>看到一张讲解Unix Permissions的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg" alt="UnixPermissions.jpg"></p>]]></content>
       
+      
+        <tags>
+            
+            <tag> system </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Oneliner Webserver</title>
+      <link href="/2018/06/28/oneliner%20webserver/"/>
+      <url>/2018/06/28/oneliner%20webserver/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-Oneliner-Webserver"><a href="#0x01-Oneliner-Webserver" class="headerlink" title="0x01 Oneliner Webserver"></a>0x01 Oneliner Webserver</h2><h3 id="Python"><a href="#Python" class="headerlink" title="Python"></a>Python</h3><ul><li>python3</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m http.server <span class="number">8888</span></span><br></pre></td></tr></table></figure><ul><li>python2</li></ul><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python2 -m SimpleHTTPServer <span class="number">8888</span></span><br></pre></td></tr></table></figure><h3 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ php -S localhost:<span class="number">8888</span> -t evil/</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> PHP &gt;=<span class="number">5.4</span></span><br><span class="line">   $ php -S localhost:<span class="number">8888</span></span><br></pre></td></tr></table></figure><h3 id="Perl"><a href="#Perl" class="headerlink" title="Perl"></a>Perl</h3><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -MIO::All -e <span class="string">'io(":8080")-&gt;fork-&gt;accept-&gt;(sub &#123; $_[0] &lt; io(-x $1 +? "./$1 |" : $1) if /^GET \/(.*) / &#125;)'</span></span><br></pre></td></tr></table></figure><h3 id="Necat"><a href="#Necat" class="headerlink" title="Necat"></a>Necat</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> <span class="literal">true</span>; <span class="keyword">do</span> nc -l 80 &lt; test.html; <span class="keyword">done</span></span><br><span class="line"></span><br><span class="line">ncat -k -l -p 1337 -c <span class="string">"printf 'HTTP/1.1 200 OK\r\n\r\n'; cat ~/evil.html"</span></span><br></pre></td></tr></table></figure><h3 id="IIS-Express"><a href="#IIS-Express" class="headerlink" title="IIS Express"></a>IIS Express</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\&gt; <span class="string">"C:\Program Files (x86)\IIS Express\iisexpress.exe"</span> /path:C:\MyWeb /port:<span class="number">8000</span></span><br></pre></td></tr></table></figure><h2 id="BusyBox"><a href="#BusyBox" class="headerlink" title="BusyBox"></a>BusyBox</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Busybox httpd</span><br><span class="line">busybox httpd -f -p 8000</span><br></pre></td></tr></table></figure><h2 id="0x02-更多参考"><a href="#0x02-更多参考" class="headerlink" title="0x02 更多参考"></a>0x02 更多参考</h2><p><a href="https://gist.github.com/willurd/5720255" target="_blank" rel="noopener">Web server : https://gist.github.com/willurd/5720255</a></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> webserver </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Protocol handler混淆</title>
+      <link href="/2018/05/22/Protocol%20handler%E6%B7%B7%E6%B7%86/"/>
+      <url>/2018/05/22/Protocol%20handler%E6%B7%B7%E6%B7%86/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Protocol-handler混淆"><a href="#0×00-Protocol-handler混淆" class="headerlink" title="0×00 Protocol handler混淆"></a>0×00 Protocol handler混淆</h2><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rundll32.exe zipfldr.dll,RouteTheCall file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^<span class="number">3</span>^<span class="number">2</span>^/^c^a^l^c^.^e^x^e</span><br><span class="line">rundll32 url.dll,FileProtocolHandler file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^<span class="number">3</span>^<span class="number">2</span>^/^c^a^l^c^.^e^x^e</span><br><span class="line">rundll32 url.dll,OpenURL file://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^<span class="number">3</span>^<span class="number">2</span>^/^c^a^l^c^.^e^x^e</span><br><span class="line">r^u^n^d^l^l3^<span class="number">2</span> u^r^l^.^d^l^l^,^O^p^e^n^U^R^L f^i^l^e://^C^:^/^W^i^n^d^o^w^s^/^s^y^s^t^e^m^<span class="number">3</span>^<span class="number">2</span>^/^c^a^l^c^.^e^x^e</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2018/05/22/5b0383c0370a7.png" alt="cale.png"></p><p>另一种访问url的方法：</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rundll32 url.dll,OpenURL http://^2^8^9^9^9^0^9^3^8^0^/</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2018/05/22/5b038546af44c.png" alt="google.png"></p><p>注：<br>其实这里访问的是<a href="http://2899909380" target="_blank" rel="noopener">http://2899909380</a>，但是访问之后会跳转到<a href="http://www.google.com，原理如下：" target="_blank" rel="noopener">www.google.com，原理如下：</a></p><blockquote><pre><code>String = 172.217.27.4Binary = 10101100 . 11011001 . 00011011 . 00000100Integer = 2899909380</code></pre><p>通过十六进制/二进制/整型的转换，达到了混淆的效果。</p></blockquote>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Protocol handler，混淆 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Sublime Text 3 使用配置</title>
+      <link href="/2018/05/01/Sublime_Text_3%20%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE/"/>
+      <url>/2018/05/01/Sublime_Text_3%20%E4%BD%BF%E7%94%A8%E9%85%8D%E7%BD%AE/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-安装Package-Control"><a href="#0x01-安装Package-Control" class="headerlink" title="0x01 安装Package Control"></a>0x01 安装Package Control</h2><blockquote><ol><li>view——show console:</li></ol></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">import urllib.request,os,hashlib; h = &apos;6f4c264a24d933ce70df5dedcf1dcaee&apos; + &apos;ebe013ee18cced0ef93d5f746d80ef60&apos;; pf = &apos;Package Control.sublime-package&apos;; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( &apos;http://packagecontrol.io/&apos; + pf.replace(&apos; &apos;, &apos;%20&apos;)).read(); dh = hashlib.sha256(by).hexdigest(); print(&apos;Error validating download (got %s instead of %s), please try manual install&apos; % (dh, h)) if dh != h else open(os.path.join( ipp, pf), &apos;wb&apos; ).write(by)</span><br></pre></td></tr></table></figure><h2 id="0x02-安装插件"><a href="#0x02-安装插件" class="headerlink" title="0x02 安装插件"></a>0x02 安装插件</h2><blockquote><ol><li>Ctrl+Shift+P ；</li><li>输入“install”，选择“Install Package”；</li></ol></blockquote><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">-- ConvertToUTF8：支持 GBK, BIG5, EUC-KR, EUC-JP, Shift_JIS 等编码的插件；</span><br><span class="line"></span><br><span class="line">-- Bracket Highlighter：用于匹配括号，引号和html标签。对于很长的代码很有用。安装好之后，不需要设置插件会自动生效；</span><br><span class="line"></span><br><span class="line">-- DocBlockr：DocBlockr可以自动生成PHPDoc风格的注释。它支持的语言有Javascript, PHP, ActionScript, CoffeeScript, Java, Objective C, C, C++；</span><br><span class="line">-- Emmet(Zen Coding)：快速生成HTML代码段的插件，强大到无与伦比，不知道的请自行google；</span><br><span class="line"></span><br><span class="line">-- SideBar Enhancements：这个插件改进了侧边栏，增加了许多功能；</span><br><span class="line"></span><br><span class="line">-- Themr：主题管理，切换主题的时候，不用自己修改配置文件了，用这个可以方便的切换主题；</span><br></pre></td></tr></table></figure><h2 id="0x03-参考链接"><a href="#0x03-参考链接" class="headerlink" title="0x03 参考链接"></a>0x03 参考链接</h2><p><a href="https://www.52pojie.cn/thread-664680-1-1.html" target="_blank" rel="noopener">【Sublime Text 3 绝对神器的真正用法】https://www.52pojie.cn/thread-664680-1-1.html</a></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> sublime text 3 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>【漫谈-转】System Call</title>
+      <link href="/2018/04/25/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/"/>
+      <url>/2018/04/25/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Process"><a href="#0×00-Process" class="headerlink" title="0×00 Process"></a>0×00 Process</h2><p>看到一张讲解System Call的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg" alt="系统调用.jpg"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> system </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>【漫谈-转】What is Process</title>
+      <link href="/2018/04/11/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91What%20is%20Process/"/>
+      <url>/2018/04/11/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91What%20is%20Process/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Process"><a href="#0×00-Process" class="headerlink" title="0×00 Process"></a>0×00 Process</h2><p>看到一张讲解Process的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/11/5acd532f4252c.jpg" alt="Process.jpg"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> system </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Improve Scapy Send Function Performance</title>
+      <link href="/2017/03/21/Scapy%E6%8F%90%E9%80%9F/"/>
+      <url>/2017/03/21/Scapy%E6%8F%90%E9%80%9F/</url>
+      <content type="html"><![CDATA[<h2 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h2><p>前几天一直在想着折腾一个Fuzz脚本,但是因为考虑到交互的原因,所以对发包的要求,所以对发包的速度还没有特别的要求,只是在最大程度上需要保证接收和发送,之前也有尝试使用其他一些TCP工具来测试.  </p><blockquote><ul><li>TCP的端口到65535(所以再快又能多块)  </li></ul></blockquote><h2 id="0x01-阴差阳错"><a href="#0x01-阴差阳错" class="headerlink" title="0x01 阴差阳错"></a>0x01 阴差阳错</h2><p>在看MITMf的源码,在作者的Github上看了GithubPage的主页,就瞅了一眼发现了这篇很有用的东西.如何提高Scapy send的性能.  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101e4da00fc.png" alt="send函数返回gensend函数.png">  </p><p>文中提到在scapy的sendrecv.py的源码中找到了send()函数以及返回的__gen_send()函数,在代码中看到了s.close这句代码,所以在每次send之后都会把socket在断掉,这样的话明显会消耗时间.  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101e4d9eaf6.png" alt="sendrecv的py文件中的close地方.png">   </p><p>然后通过查找,最终在scapypipes.py文件中找到了  </p><blockquote><pre><code>s = conf.L3socket(iface=interface)  </code></pre></blockquote><p>所以可以提速测试一下了,小脚本的代码也就稍微的做了改变:  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101e4da3010.png" alt="scapy提速后的代码.png"></p><p>运行代码之后,速度岂止是提高了一倍,是太明显的提速,截图是运行脚本测试发送1000个syn包的时间:  </p><blockquote><pre><code>time python test.py  </code></pre></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101e4e23f6d.png" alt="发送1000个数据包的时间.png"></p><p>最后奉上原文链接:  </p><p><a href="https://byt3bl33d3r.github.io/mad-max-scapy-improving-scapys-packet-sending-performance.html" target="_blank" rel="noopener">https://byt3bl33d3r.github.io/mad-max-scapy-improving-scapys-packet-sending-performance.html</a></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Scapy </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Scapy-TCP-fuzz v0.3</title>
+      <link href="/2017/03/16/scapy-TCP-fuzz%E5%8D%87%E7%BA%A70-3/"/>
+      <url>/2017/03/16/scapy-TCP-fuzz%E5%8D%87%E7%BA%A70-3/</url>
+      <content type="html"><![CDATA[<p><img src="https://ooo.0o0.ooo/2017/05/08/59101ac3d3752.jpg" alt="jack1.jpg"></p><h2 id="0x01-Bug"><a href="#0x01-Bug" class="headerlink" title="0x01 Bug"></a>0x01 Bug</h2><p>之前呢只是用scapy来单纯的实现tcp握手+s7的简单fuzz,当然只是自己觉得这个方法是可行的,写了两个吧,一个是单纯的用socket的,另一个是scapy,然后我现在发现我的脚本跑着跑着就会出一些小问题,看报错的话问题还是出在握手的时候发生了什么不可预知的错误?</p><h2 id="0x02-think"><a href="#0x02-think" class="headerlink" title="0x02 think"></a>0x02 think</h2><p>我猜测可能是这样的,因为从抓包来看的话,设备对于伪造的数据包返回的RST包并没有想象中的那么快,所以在第二轮的发包过程中,接收到了第一轮返回的RST包,所以在这过程中会收到很多keep-alive的数据包,当发包的速度快于回应的速度的时候,积累到一定程度,达到连接上限,然后下一次的连接就自然的失败并且报错了,当然,这只是我猜测的一种情况.</p><h2 id="0x03-Solution"><a href="#0x03-Solution" class="headerlink" title="0x03 Solution"></a>0x03 Solution</h2><ul><li>预想的解决办法:</li></ul><p>结合socket和scapy来同时实现这个fuzz的功能,通过socket来建立连接,而通过scapy来负责伪造发包等功能,这样是否会相对稳定,感觉在一定程度上控制了重连的频率,关于日志记录,还在想一个更好的方式来记录异常信息,但是更想要通过能实时的解析数据包是最好的选择.</p><h2 id="0x04-Do-it"><a href="#0x04-Do-it" class="headerlink" title="0x04 Do it."></a>0x04 Do it.</h2><p>两天后.</p><p>这两天又折腾了另一个版本的fuzz脚本,之前想要通过socket连接,然后获取端口后在利用scapy进行测试,但是尝试了一下之后发现好像有点儿不是很方便,或者说两者的区别没有太明显?</p><p>在上个版本的基础上升级了一下(姑且就当我的折腾是版本的升级吧),在代码中直接添加了scapy的sniff模块来过滤目标IP的数据包,在发送伪造的数据包的下一句执行监听,监听两个数据包即结束监听.</p><blockquote><p>为什么监听两个,当时的设想是可以监听到一个ack和一个rest数据包,但实际代码执行的过程中并没有收到预想中的数据包(sniff到的应该是两个重传包,重传的是设备返回的error code的数据包),所以,同样是有价值的,判断sniff到的两个数据包,可判断伪造数据包的返回状态,丢弃还是记录.</p></blockquote><blockquote><ul><li>需要考虑的一个问题:<br>iptables -A OUTPUT -p tcp –tcp-flags RST RST -j DROP<br>配置丢掉所有的RST包,那么收到RST包之的时候,谁先对其进行处理,是iptables还是wireshark?那么scapy是怎么样的?</li></ul></blockquote><h2 id="0x05-Some-supplement"><a href="#0x05-Some-supplement" class="headerlink" title="0x05 Some supplement"></a>0x05 Some supplement</h2><ul><li>通过analysis来粗略的判断返回结果,并决定是否被记录.</li></ul><p><img src="https://ooo.0o0.ooo/2017/05/08/59101b5be678a.png" alt="v0.3添加了analysis函数.png"></p><ul><li>sniffer功能没有想象中的快速,也就是返回ack的速度比执行发送之后执行下一条命令的时间要迅速.因为sniff到两个重传包就是最好的例子,当然不排除代码实现很渣导致这个原因.</li></ul><p><img src="https://ooo.0o0.ooo/2017/05/08/59101b5be7b2e.png" alt="v0.3fuzz函数添加了sniff.png"></p><ul><li>预想中的sniffer应该是单独的一个功能,通过多进程实现?不断发包的同时实时处理接收到返回信息,以此来判断是否需要重连或者继续发包.</li></ul><p><img src="https://ooo.0o0.ooo/2017/05/08/59101b822d5cd.png" alt="v0.3预想中的sniff函数.png"></p><ul><li>我还想把脚本执行过程中的那些正常情况下命令行的回显都隐藏起来,显得简洁,有报错的时候抛出异常就可以.</li></ul><h3 id="Project-Source-Code"><a href="#Project-Source-Code" class="headerlink" title="Project Source Code:"></a>Project Source Code:</h3><p><a href="https://github.com/yizhimanpadewoniu/FuzzScapy" target="_blank" rel="noopener">https://github.com/yizhimanpadewoniu/FuzzScapy</a></p><h2 id="0x06-About-blog"><a href="#0x06-About-blog" class="headerlink" title="0x06 About blog"></a>0x06 About blog</h2><ul><li>添加了评论功能,虽然我觉得这个功能目前来说确实是很扯淡的.</li></ul>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Scapy TCP-running fuzz</title>
+      <link href="/2017/03/07/scapy-TCP%E4%BA%A4%E4%BA%92-%E5%A5%94%E8%B7%91%E5%90%A7fuzz/"/>
+      <url>/2017/03/07/scapy-TCP%E4%BA%A4%E4%BA%92-%E5%A5%94%E8%B7%91%E5%90%A7fuzz/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-写在前"><a href="#0x00-写在前" class="headerlink" title="0x00 写在前"></a>0x00 写在前</h2><p>截至到今天,分别基于socket和scapy的fuzz小脚本基本成型,可以顺利的跑起来并且可以不间断的做效率较低的协议fuzz测试,当然,协议是S7.</p><h2 id="0x01-日志方式"><a href="#0x01-日志方式" class="headerlink" title="0x01 日志方式"></a>0x01 日志方式</h2><p>最终还是采取了日志记录整个fuzz过程的方式,大致过程如下:</p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101d0ab979e.png" alt="scapy_fuzz流程图.png">  </p><blockquote><p>图画的有点儿粗糙,基本上就是这样的一个流程,在发送畸形数据包之后,因为数据格式错误,所以接收到RST包,因此不断的重新握手,发送伪造的数据包.</p></blockquote><blockquote><ul><li>为什么用日志文件?</li></ul></blockquote><blockquote><blockquote><p>因为在执行过程中如果能对每次的返回数据进行分析是最好的选择,但是目前从实现看来先通过scapy的sniff模块,进行嗅探之后,直接从buffer中将flags/load等信息直接记录到文件中,当设备报错之后,我们可以从日志文件中直接找到出现文件的点以及是什么数据内容造成了设备的异常.</p></blockquote></blockquote><blockquote><ul><li>能不能跑得更快?</li></ul></blockquote><blockquote><blockquote><p>这也是我在想的问题,这样看起来,需要时间来进行fuzz测试,但是如果能提高速度,那么效率提起来之后,设备的承受能力已经是否有问题很快就可以得出结论.所以,在考虑多线程或者多进程可能会有帮助?</p></blockquote></blockquote><blockquote><ul><li>wireshark抓包过程出现伪重放</li></ul></blockquote><blockquote><blockquote><p>因为自己在循环的过程中,五元组数据中的端口没有重新随机一次,所以wireshark会识别为伪重放,但是并不影响设备的正常响应,所以解决办法也很简单的.</p></blockquote></blockquote><h2 id="0x02-待优化吧"><a href="#0x02-待优化吧" class="headerlink" title="0x02 待优化吧"></a>0x02 待优化吧</h2><ul><li>测试效率–提高速度</li><li>并发并行–两个进程</li><li>数据包格式–更有针对性</li><li>是否还有更好的方式解决问题?</li></ul><h2 id="0x03-小货车跑起来"><a href="#0x03-小货车跑起来" class="headerlink" title="0x03 小货车跑起来"></a>0x03 小货车跑起来</h2><p>终于能跑一晚上试试水了,不会写代码真的是硬伤.</p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101d47624dd.png" alt="fuzz初步成功第一个晚上测试运行.png">  </p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Scapy TCP-push to github</title>
+      <link href="/2017/03/03/scapy-TCP%E4%BA%A4%E4%BA%92-1/"/>
+      <url>/2017/03/03/scapy-TCP%E4%BA%A4%E4%BA%92-1/</url>
+      <content type="html"><![CDATA[<p>至此,我想我可以开始写这篇基于python、scapy的tcp交互的实现了,也许写这样的东西有点儿过时了,因为之前已经有好多人写过相关的东西,但是大家的方向不一样吧,更多的人偏向于写扫描,探测,以及简单的实现三次握手.感觉没有具体的讲某一点我觉得很重要的东西,比如是怎么实现一个完整的交互(当然可能是因为是我搜索的技术有限,没有找到相关的信息).</p><h2 id="0x00-环境"><a href="#0x00-环境" class="headerlink" title="0x00 环境"></a>0x00 环境</h2><ul><li>kali2.0 Linux</li><li>Python 2.7</li><li>scapy 2.33</li><li>Pycharm<br>*</li></ul><h2 id="0x01-TCP三次握手"><a href="#0x01-TCP三次握手" class="headerlink" title="0x01 TCP三次握手"></a>0x01 TCP三次握手</h2><p>三次握手的过程我是从网上在搜索scapy TCP交互实例的时候发现别人写的挺好的,所以直接拿来用了.2333,自己好挫……  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101bc086424.png" alt="TCP三次握手实现代码.png"></p><p>我们通过执行脚本时传入源IP/目的IP/目的端口即可完成建立三次握手,网上很多都有讲到这个实例的实现过程,所以不多赘述.</p><blockquote><p>注意:</p></blockquote><blockquote><ul><li>这里你可能会发现运行结果的wireshark抓包显示连接没有能够正常建立,直接是RST掉了,原因是什么???</li><li>防火墙因为没有发syn包,所以对于回来的ack包直接RST掉了(就像是你没点菜服务员却告诉你你需要确认你刚刚点菜的菜单,所以你肯定是首先RST掉).</li><li><p>这两条命令就是关于这个问题的解决方式,直接配置防火墙丢掉RST包.</p><pre><code>iptables -A OUTPUT -p tcp --tcp-flags RST RST -j DROPiptables -L(查看状态~)</code></pre></li></ul></blockquote><h2 id="0x02-与设备握手交互"><a href="#0x02-与设备握手交互" class="headerlink" title="0x02 与设备握手交互"></a>0x02 与设备握手交互</h2><p>因为我自身接触的设备有一个类似于tcp三次握手的建连过程,所以在tcp建连之后还需要一次连接过程,这之间要涉及到ack和seq的问题,是我遇到的问题,不知道熟悉TCP的人会不会也遇到.</p><h4 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h4><ul><li>sr()函数拥有在第三层的接收和发送功能,所以我们通过sr()来负责发送接收含有data的数据包</li><li>send()只有发送功能,不管接收,我们可以用来发送ack等包</li></ul><p>我用word做了一个简单的TCP握手和交互的过程:  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101be94c42c.png" alt="模拟握手和交互示例图.png"></p><blockquote><p>我们从过程中可以看出,seq和ack是在不断变化的,我们只针对客户端,我们的seq值和ack值的变化是根据上一个数据包的ack和接收到的data数据的长度来决定</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101bfcbecb1.png" alt="wireshark已经识别了数据长度并计算了下一个ack的值.png"></p><blockquote><p>如图我们可以清楚的看到,seq值和ack的关联以及我们如果计算,那么剩下的就可以通过代码实现.</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101c154f8b3.png" alt="seq值的实现代码.png"></p><blockquote><p>我们通过图片可以看到计算的方式是通过sr()函数接收到的数据包,来计算返回data的长度,以此来确定ack和seq.</p><p>另外,应该还要注意几个参数:</p><ul><li>timeout 和 multi</li></ul></blockquote><blockquote><pre><code>这两个参数可以延长sr()的接收数据包的等待时间,接收足够的answer数据.因为sr()返回的数据格式是tuple类型,如下图.</code></pre></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101c4be07d7.png" alt="scapy收到的元组格式.png"></p><blockquote><p>第二层元组访问数据包数据:</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101c7068ddb.png" alt="scapy查看深层的元组格式.png"></p><blockquote><p>运行程序,在结果中打印一个sr()接收到的answer数据:</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101c80e7ac1.png" alt="scapy打印一个接收到的数据包.png"></p><blockquote><p>wireshark默认对接收到数据的处理,wireshark也计算了返回数据的长度并预算了下一个ack:</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101c9dac38c.png" alt="scapy确定收到数据中元组的返回数据内容和长度.png"></p><p>这几张截图很关键,因为没有更好的显示方式,这里其实出现了一个问题,也就是我上面提到的要用timeout和multi这两个参数的原因,因为如果不设置等待的时间,那么我当前要测试的设备首先返回的是一个ack包而不是真正的数据包,所以等待时间不够是无法接收到真实数据并确定合理的ack和seq值.</p><p>做不到的话那么肯定是畸形数据包了,不会被接受并一直等待响应.</p><ul><li>解决办法</li></ul><blockquote><ul><li>笨办法<br>连续发包两次,第一个请求返回ack包后马上发第二个包,可以得到正确返回值<br><img src="https://ooo.0o0.ooo/2017/05/08/59101cbc87457.png" alt="同一个数据包发送两次.png"></li></ul></blockquote><blockquote><ul><li>相对较好的解决办法<br>设置足够的等待时间,然后遍历所有的数据包,从中去获得真实的返回数据的数据包.</li></ul></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101ce58e064.png" alt="scapy发包命令行过程.png"></p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101cf522ad9.png" alt="scapy第一次完整的运行.png"></p><h2 id="0x03-新的问题"><a href="#0x03-新的问题" class="headerlink" title="0x03 新的问题"></a>0x03 新的问题</h2><p>在接收到畸形数据之后,目标直接返回RST,但是并没有在sr之中得到一个真实的返回数据,也就是说没有返回任何东西,只有一个ack,所以下一步怎么处理RST需要考虑一下?</p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>python socket--Fuzz小脚本折腾记</title>
+      <link href="/2017/02/28/python%E5%B0%8F%E8%84%9A%E6%9C%AC%E6%8A%98%E8%85%BE%E8%AE%B0-1/"/>
+      <url>/2017/02/28/python%E5%B0%8F%E8%84%9A%E6%9C%AC%E6%8A%98%E8%85%BE%E8%AE%B0-1/</url>
+      <content type="html"><![CDATA[<h2 id="0x00-搞事情吧"><a href="#0x00-搞事情吧" class="headerlink" title="0x00 搞事情吧"></a>0x00 搞事情吧</h2><p>自己想要尝试对S7协议测试,想通过在保证数据包格式正确的情况下,随意构造不真实的数据发送到目的地,一定程度上算是一种模糊测试?额~~~~</p><h2 id="0x01-整"><a href="#0x01-整" class="headerlink" title="0x01  整"></a>0x01  整</h2><ul><li>思路  </li></ul><p>数据包的标识不变,随机生成参数数据,然后通过socket,发送给目标,但是并不能保证每个数据包的内容都是有效的,可能是有很多垃圾内容,所以连接会被RST掉,考虑到这样的情况,只能是不断的重新连接、发包,重复这个过程,并且在每执行一次之后ping设备,设置超时之后将该数据包记录到日志文件中,可能此数据包生效.</p><ul><li>编程问题  </li></ul><blockquote><ul><li>自动给个位数补”0”  </li></ul></blockquote><blockquote><pre><code>a = random.randint(0,9)  # 括号里的数字表示位数b = a.zfill(3)  print b  </code></pre></blockquote><blockquote><ul><li>怎么生成随机的data部分  </li></ul></blockquote><blockquote><pre><code># 我neargle给的建议  neargle = 20  print &apos;&apos;.join(random.choice(string.digits) for i in range(neargle))  </code></pre></blockquote><blockquote><ul><li>正确生成数据  </li></ul></blockquote><blockquote><p>上面随机生成data部分不合理,我应该是随机生成十六进制的字符串是最理想的状态,在网上搜索得到了写的很好的一段代码  </p></blockquote><blockquote><pre><code>def randomString(n):      return (&apos;&apos;.join(map(lambda xx:(hex(ord(xx))[2:]),os.urandom(n))))[0:16]  # 不得不说人家写的真的到位,具体的内容参考连接:[随机生成十六进制字符串](http://blog.csdn.net/amghost/article/details/12883025)  </code></pre></blockquote><blockquote><ul><li><strong>这一点很重要</strong>  </li></ul></blockquote><blockquote><p>这一点很重要,为什么说他重要,因为我们在wireshark抓包的过程中,看到的其实是:  <strong>十六进制的ascii显示</strong>.  </p></blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59101f58666f3.png" alt="wireshark十六进制ascii显示.png">  </p><blockquote><p>如果通过python传送的数据应该是下面的格式:  </p></blockquote><blockquote><pre><code>\x03\x00\x00\x16\x11\xe0\x00\x00\x00\x12\x00\xc1\x02\x01\x00\xc2\x02\x01\x02  </code></pre><p>而不是:  </p></blockquote><blockquote><pre><code>0300001611e00000001200c1020100c2020102  </code></pre></blockquote><blockquote><p>这两种方式的显示是一目了然的,后者明显是不会被识别为正常的格式,但是我们生成的是第二种的字符串,我们通过代码转成需要的格式直接发送给目标,中间省略将字符串先转化为”\x00”这样的过程,本来我是不懂得,但是还是找到了我认为比较好的方式,先拿来用了  </p></blockquote><blockquote><pre><code>def str2byte(data):    base = &apos;0123456789ABCDEF&apos;    i = 0    data = data.upper()    result = &apos;&apos;    while i &lt; len(data):        beg = data[i]        end = data[i+1]        i += 2        b1 = base.find(beg)        b2 = base.find(end)        if b1 == -1 or b2 == -1:            return None        result += chr((b1 &lt;&lt; 4) + b2)    return result  </code></pre><p>   当时是参照<a href="https://zhidao.baidu.com/question/1576452206019942660.html" target="_blank" rel="noopener">一篇百度知道的回答</a>  </p></blockquote><h2 id="0x02-最终"><a href="#0x02-最终" class="headerlink" title="0x02 最终"></a>0x02 最终</h2><p>所以,基本解决了上面的问题,今晚就开一整晚,让他自己去跑着测试吧,但是感觉效率还是很低,怎么办呢?暂时想不出来…  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/59101f6f7fe74.png" alt="运行成功wireshark截图.png"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> PythonFuzz </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>pktgen-dpdk的踩坑过程</title>
+      <link href="/2017/02/21/pktgen%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8-%E5%A3%B9/"/>
+      <url>/2017/02/21/pktgen%E5%B7%A5%E5%85%B7%E7%9A%84%E4%BD%BF%E7%94%A8-%E5%A3%B9/</url>
+      <content type="html"><![CDATA[<p>##0x01 先说几句<br>我个人觉得这是一次踩坑的过程,之前也没有搞过这个东西,所以即使现在搞起来了,但是我还是不是很清楚到底是什么机制,现在想先把过程记录下来,说不定哪天懵逼的时候还能够帮得上一点点忙?<br>一开始的初衷是想要收集一款tcp的发包工具用来测试自己身边的设备性能,过程中看到了pktgen(linux内核模块),在搜索过程中发现了这篇文章提到的工具,慢慢发现这好像是两个完全不同的东西,pktgen不支持TCP,pktgen-dpdk是支持TCP的,所以开始尝试着使用这个工具.</p><p>##0x02 开整<br>整个过程都没有百度过别人的技术文档,纯粹参照官方的网站进行一步步操作的,所以可能绕了一些弯路或者怎样,看官们轻喷可好?<br><a href="http://pktgen.readthedocs.io/en/stable/index.html" target="_blank" rel="noopener">官方文档: http://pktgen.readthedocs.io/en/stable/index.html</a></p><p>step 1 环境:  </p><ul><li>使用系统版本: kali 2.0  </li><li>内核版本: 4.9.0-kali1-amd64  </li></ul><p>step 2 操作:</p><ul><li>查看官方文档,需要配置HugePages(会发现可能系统默认已经配置好)  </li><li>Get源码  </li></ul><blockquote><ul><li><p>dpdk源码  </p><p>   git clone git://dpdk.org/dpdk(你会发现失效,什么都没有clone)<br>   正确姿势: 去官网下载安装包 <a href="http://www.dpdk.org/download" target="_blank" rel="noopener">http://www.dpdk.org/download</a><br>   注意安装包版本的选择(我用了稳定版的文件),可能会直接影响到之后的编译过程  </p></li></ul></blockquote><blockquote><ul><li>pktgen-dpdk源码  </li></ul></blockquote><blockquote><pre><code>git clone http://dpdk.org/git/apps/pktgen-dpdk</code></pre></blockquote><ul><li>安装linux内核头文件以允许DPDK编译自己的模块  </li></ul><blockquote><pre><code>sudo apt-get install linux-headers-3.5.0-32-generic  </code></pre></blockquote><ul><li>你可能还需要安装依赖  </li></ul><blockquote><pre><code>sudo apt-get install libpcap-dev  </code></pre></blockquote><ul><li>设置环境变量  </li></ul><blockquote><pre><code>export RTE_SDK = /root/GitPro/dpdk(你的dpdk路径)  export RTE_TARGET=x86_64-native-linuxapp-gcc  </code></pre></blockquote><ul><li>编译dpdk  </li></ul><blockquote><pre><code>cd $RTE_SDK  make install T=x86_64-native-linuxapp-gcc  过程中出现的问题稍后总结Just ignore it.</code></pre></blockquote><ul><li>编译pktgen-dpdk  </li></ul><blockquote><pre><code>cd /root/Git/pktgen-dpdk(我的路径)  make  这里可能会报错,也可能不会,待会儿再说错误  </code></pre></blockquote><p>到此为止,再无任何错误的情况下,应该是编译这个过程搞定了,剩下的可能就是一些收尾的配置,到这里先总结几个问题.  </p><p>0x03 编译问题小结  </p><p>这些问题是否出现取决于版本问题  </p><ul><li>Installation cannot run with T defined and DESTDIR undefined  </li></ul><blockquote><p>提示你没有指定安装路径,这里我们只需要编译,本来也不需要安装,所以忽略,不影响使用   </p></blockquote><ul><li>make pktgen error1  </li></ul><p><img src="https://ooo.0o0.ooo/2017/05/08/591024ba86fad.png" alt="RTE_SDK还是之前dpdk的路径_勿修改.png">  </p><blockquote><p>这个错是低级的,因为我改动了RTE_SDK这个参数,改为指定到pktgen的路径,这完全是错误的,这个参数在第一次设置后就不需要修改,路径就是dpdk的路径  </p></blockquote><ul><li>make pktgen error2  </li></ul><p><img src="https://ooo.0o0.ooo/2017/05/08/591024ba8810c.png" alt="make_error2.png">  </p><blockquote><p>注意我的版本,我用了pktgen-dpdk 2.7.6的这个版本,有可能是版本的原因,所以可能是个人的操作的原因吧,自己去官方网站手动的去下载了安装包,直接源码make,所以出了这样或者那样的错误,直接从git克隆那个版本的就ok了,不需要这么麻烦,完成make.  </p></blockquote><p>这里需要附上一张编译成功之后的结果,会在你的路径下生成一个可执行的pktgen的文件,看似好像是成功咯?  </p><p><img src="https://ooo.0o0.ooo/2017/05/08/591024bb7823c.png" alt="编译成功结果.png"></p><h2 id="0x04-后续的问题"><a href="#0x04-后续的问题" class="headerlink" title="0x04 后续的问题"></a>0x04 后续的问题</h2><ul><li>关于setup.sh  </li></ul><blockquote><p>文章中提到,pktgen-dpdk路径下有这样一个文件,会在执行后自动的去完成一些配置,找了半天发现没有这个文件,头疼,要炸了.<br>当时突然想到是不是较低的版本有这个东西,发现确实是这样的,见下图.我直接拿来用了.  </p></blockquote><blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/591024bb79076.png" alt="两个版本的文件数对比.png"></p></blockquote><blockquote><p>当然了,你运行这个脚本会发现你可能还是有错,错误提示是找不到什么文件之类的,是因为clone下来的这个版本他确实没有,所以还是复制一份过来,这下就ok了.试着继续运行setup.sh(截图可能和当时情况有出入,但是先看着,显示的形式基本是这样的)<br><img src="https://ooo.0o0.ooo/2017/05/08/59102515ee8bb.png" alt="网卡要先down掉.png"><br>初次运行setup.sh你可能还会发现没有提示:在dpdk/tools路径下没有dpdk_nic_bind.py文件,和上面的方法一样,去复制一份过来,其他版本里有,这种方法好像很没水平,对于我这种lowB来说好像很适合.23333<br>之后运行setup.sh文件,你可能发现还是有写不对劲的地方,原因是没有绑定自己的网卡,这个文件中有几行代码是用来绑定你的网卡的,打开setup.sh文件你会发现,我们只需要修改其中的点就可以解决了  </p></blockquote><blockquote><p>查看网卡信息:<br><img src="https://ooo.0o0.ooo/2017/05/08/591025163ceaf.png" alt="绑定网卡bind.png">  </p></blockquote><blockquote><p>修改配置文件完成:<br><img src="https://ooo.0o0.ooo/2017/05/08/59102515ed58d.png" alt="绑定网卡修改setup文件.png">  </p></blockquote><blockquote><pre><code>在网卡信息的图片中可以看到:  Kernel driver in use: igb_uio(说明网卡已经成功绑定)  </code></pre></blockquote><ul><li>初次运行pktgen  </li></ul><blockquote><pre><code>./pktgen -h  </code></pre></blockquote><blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/591025471c3d7.png" alt="运行pktgen报错1-找不到pktgen.png"><br>这个问题解决方法是从Github的issue中找到解决方法的,将pktgen的可执行文件,直接拷贝到pktgen-dpdk的根目录下执行,问题就解决了.  </p></blockquote><blockquote><p><img src="https://ooo.0o0.ooo/2017/05/08/59102565ef646.png" alt="成功运行pktgen.png"><br><img src="https://ooo.0o0.ooo/2017/05/08/591025667fb4d.png" alt="执行pktgen命令1.png">  </p></blockquote><ul><li>绑定网卡  </li></ul><blockquote><p>绑定网卡的时候一定要将网卡down掉,否则setup.sh文件执行的时候会报错.  </p></blockquote><blockquote><pre><code>ifconfig eth0 down  </code></pre></blockquote><ul><li>变量设置  </li></ul><blockquote><p>关于RTE_SDK和RTE_TARGET这两个参数,因为每次重新启动之后都需要重新设置,所以你可以将这两个写入到脚本中,系统启动的时候也就设定好了.  </p></blockquote><p>##0x05 写在最后  </p><p>自己测试了一下这个东西,好像他更像是发起Dos攻击的工具,经过dpdk的包全部任何的都发送到目的IP吧,和我想要的还是有些距离,暂时和这个东西,say bye.</p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> TCPtools </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>Fiddler常用几点</title>
+      <link href="/2016/01/04/Fiddler%E6%8A%93%E5%8C%85%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/"/>
+      <url>/2016/01/04/Fiddler%E6%8A%93%E5%8C%85%E4%BD%BF%E7%94%A8%E5%BF%83%E5%BE%97/</url>
+      <content type="html"><![CDATA[<h2 id="0×01-关于证书"><a href="#0×01-关于证书" class="headerlink" title="0×01 关于证书"></a>0×01 关于证书</h2><p>有些抓不到包，但是同时还会报错<br>需要到处比如网银证书，然后改名为“ClientCerficate.cer”放到Fiddler路径下</p><h2 id="0×01-快捷键"><a href="#0×01-快捷键" class="headerlink" title="0×01 快捷键"></a>0×01 快捷键</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">F2: 解除锁定，可改包，而后重放</span><br><span class="line">F11: 拦截请求，逐一改包</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2018/05/24/5b061c30643b7.png" alt="use.png"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> tools </tag>
+            
+            <tag> fiddler </tag>
+            
+        </tags>
       
     </entry>
     
