@@ -3,6 +3,21 @@
   
     
     <entry>
+      <title>FileName Bypass</title>
+      <link href="/2018/07/23/Filename_space_charactor/"/>
+      <url>/2018/07/23/Filename_space_charactor/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-Only-“space-characters”"><a href="#0x01-Only-“space-characters”" class="headerlink" title="#0x01 Only “space characters”"></a>#0x01 Only “space characters”</h2><blockquote><p><strong>使用空格符做文件名，达到隐藏的目的，使用“ls -la”命令，可能都无法察觉</strong></p></blockquote><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cat &gt; <span class="string">' '</span></span><br><span class="line">cat &gt; <span class="string">" "</span></span><br><span class="line">cat &gt; \ </span><br><span class="line">cat &gt; .\</span><br><span class="line">cat &gt; \ \ \ \</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2018/07/23/5b5546e8c5594.png" alt="测试过程"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> bypass </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>【漫谈-转】Unix Permissions</title>
       <link href="/2018/07/15/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/"/>
       <url>/2018/07/15/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/</url>
@@ -27,6 +42,38 @@
         <tags>
             
             <tag> webserver </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>检测不安全的http请求</title>
+      <link href="/2018/06/17/%E6%A3%80%E6%B5%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84http%E8%AF%B7%E6%B1%82/"/>
+      <url>/2018/06/17/%E6%A3%80%E6%B5%8B%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84http%E8%AF%B7%E6%B1%82/</url>
+      <content type="html"><![CDATA[<h3 id="0x01-其他方法"><a href="#0x01-其他方法" class="headerlink" title="## 0x01 其他方法"></a>## 0x01 其他方法</h3><blockquote><ul><li>PUT        //向指定的目录上载文件</li><li>DELETE        //删除指定的资源</li><li>COPY        //将指定的资源复制到Destination消息头指定的位置</li><li>MOVE        //将指定的资源移动到Destination消息头指定的位置</li><li>SEARCH        //在一个目录路径中搜索资源</li><li>PROPFIND        //获取与指定资源有关的信息，如作者、大小与内容类型</li><li>TRACE        //在响应中返回服务器收到的原始请求</li></ul></blockquote><h3 id="0x02-手动测试"><a href="#0x02-手动测试" class="headerlink" title="## 0x02 手动测试"></a>## 0x02 手动测试</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">curl -v -X OPTIONS http://www.baidu.com/<span class="built_in">test</span>/</span><br><span class="line"></span><br><span class="line">查看响应的 Allow: GET, HEAD, POST, PUT, DELETE, OPTIONS</span><br><span class="line"></span><br><span class="line">curl -X DELETE http://www.baidu.com/<span class="built_in">test</span>/test2.html</span><br><span class="line"></span><br><span class="line">如果删除成功，则攻击有效。</span><br><span class="line"></span><br><span class="line">curl -v -T test.html  http://www.baidu.com/<span class="built_in">test</span>/test.html</span><br><span class="line"></span><br><span class="line">看是否能上载来判断攻击是否生效。</span><br></pre></td></tr></table></figure><p><img src="https://i.loli.net/2018/07/17/5b4d60156d203.png" alt="检测Option方法"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> http </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>pip install package访问速度太慢解决办法</title>
+      <link href="/2018/05/25/pip%E5%AE%89%E8%A3%85%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8C%85%E8%AE%BF%E9%97%AE%E5%A4%AA%E6%85%A2/"/>
+      <url>/2018/05/25/pip%E5%AE%89%E8%A3%85%E7%AC%AC%E4%B8%89%E6%96%B9%E5%8C%85%E8%AE%BF%E9%97%AE%E5%A4%AA%E6%85%A2/</url>
+      <content type="html"><![CDATA[<h2 id="0x01"><a href="#0x01" class="headerlink" title="0x01"></a>0x01</h2><p>在通过pip安装第三方工具包的时候，出现下面的报错，因为访问太慢</p><p><img src="https://i.loli.net/2018/05/25/5b07c129ace4b.jpg" alt="ssl_timeout.jpg"></p><blockquote><p>解决办法如下</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; pip install package -i http://pypi.douban.com/simple --trusted-host pypi.douban.com</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></blockquote><blockquote></blockquote><p><img src="https://i.loli.net/2018/05/25/5b07c129ad546.jpg" alt="ssl报错.jpg"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> python </tag>
+            
+            <tag> pip </tag>
             
         </tags>
       
