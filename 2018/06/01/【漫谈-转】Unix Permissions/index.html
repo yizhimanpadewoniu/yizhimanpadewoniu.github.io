@@ -6,20 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="0×00 Process看到一张讲解System Call的图，画的简单易懂又好看。">
+    <meta name="description" content="0×00 Unix Permissions看到一张讲解Unix Permissions的图，画的简单易懂又好看。">
 <meta name="keywords" content="system">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【漫谈-转】System Call">
-<meta property="og:url" content="http://am4zing.me/2018/04/25/【漫谈-转】System Call/index.html">
+<meta property="og:title" content="【漫谈-转】Unix Permissions">
+<meta property="og:url" content="http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/index.html">
 <meta property="og:site_name" content="am4zing·wang2ha">
-<meta property="og:description" content="0×00 Process看到一张讲解System Call的图，画的简单易懂又好看。">
+<meta property="og:description" content="0×00 Unix Permissions看到一张讲解Unix Permissions的图，画的简单易懂又好看。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg">
-<meta property="og:updated_time" content="2018-04-26T01:54:49.685Z">
+<meta property="og:image" content="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg">
+<meta property="og:updated_time" content="2018-08-01T14:03:27.403Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【漫谈-转】System Call">
-<meta name="twitter:description" content="0×00 Process看到一张讲解System Call的图，画的简单易懂又好看。">
-<meta name="twitter:image" content="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg">
+<meta name="twitter:title" content="【漫谈-转】Unix Permissions">
+<meta name="twitter:description" content="0×00 Unix Permissions看到一张讲解Unix Permissions的图，画的简单易懂又好看。">
+<meta name="twitter:image" content="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg">
     
     
         
@@ -39,7 +39,7 @@
         
     
     <!-- title -->
-    <title>【漫谈-转】System Call</title>
+    <title>【漫谈-转】Unix Permissions</title>
     <!-- styles -->
     <link rel="stylesheet" href="/css/style.css">
     <!-- persian styles -->
@@ -77,10 +77,10 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2018/05/01/Sublime_Text_3 使用配置/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/06/01/【漫谈-转】System Call/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" href="/2018/04/11/【漫谈-转】What is Process/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2018/05/25/pip安装第三方包访问太慢/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -93,21 +93,21 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/04/25/【漫谈-转】System Call/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&text=【漫谈-转】System Call"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&is_video=false&description=【漫谈-转】System Call"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【漫谈-转】System Call&body=Check out this article: http://am4zing.me/2018/04/25/【漫谈-转】System Call/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&name=【漫谈-转】System Call&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&text=【漫谈-转】Unix Permissions"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&is_video=false&description=【漫谈-转】Unix Permissions"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【漫谈-转】Unix Permissions&body=Check out this article: http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&name=【漫谈-转】Unix Permissions&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     <div id="toc">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×00-Process"><span class="toc-number">1.</span> <span class="toc-text">0×00 Process</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×00-Unix-Permissions"><span class="toc-number">1.</span> <span class="toc-text">0×00 Unix Permissions</span></a></li></ol>
     </div>
   </span>
 </div>
@@ -119,7 +119,7 @@
   <header>
     
     <h1 class="posttitle" itemprop="name headline">
-        【漫谈-转】System Call
+        【漫谈-转】Unix Permissions
     </h1>
 
 
@@ -130,7 +130,7 @@
       </span>
       
     <div class="postdate">
-        <time datetime="2018-04-24T16:00:00.000Z" itemprop="datePublished">2018-04-25</time>
+        <time datetime="2018-05-31T16:00:00.000Z" itemprop="datePublished">2018-06-01</time>
     </div>
 
 
@@ -146,8 +146,8 @@
   
 
   <div class="content" itemprop="articleBody">
-    <h2 id="0×00-Process"><a href="#0×00-Process" class="headerlink" title="0×00 Process"></a>0×00 Process</h2><p>看到一张讲解System Call的图，画的简单易懂又好看。</p>
-<p><img src="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg" alt="系统调用.jpg"></p>
+    <h2 id="0×00-Unix-Permissions"><a href="#0×00-Unix-Permissions" class="headerlink" title="0×00 Unix Permissions"></a>0×00 Unix Permissions</h2><p>看到一张讲解Unix Permissions的图，画的简单易懂又好看。</p>
+<p><img src="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg" alt="UnixPermissions.jpg"></p>
 
   </div>
 </article>
@@ -182,21 +182,21 @@
     </div>
 
     <div id="toc-footer" style="display: none">
-      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×00-Process"><span class="toc-number">1.</span> <span class="toc-text">0×00 Process</span></a></li></ol>
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×00-Unix-Permissions"><span class="toc-number">1.</span> <span class="toc-text">0×00 Unix Permissions</span></a></li></ol>
     </div>
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/04/25/【漫谈-转】System Call/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&text=【漫谈-转】System Call"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&is_video=false&description=【漫谈-转】System Call"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【漫谈-转】System Call&body=Check out this article: http://am4zing.me/2018/04/25/【漫谈-转】System Call/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&title=【漫谈-转】System Call"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/04/25/【漫谈-转】System Call/&name=【漫谈-转】System Call&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&text=【漫谈-转】Unix Permissions"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&is_video=false&description=【漫谈-转】Unix Permissions"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【漫谈-转】Unix Permissions&body=Check out this article: http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&title=【漫谈-转】Unix Permissions"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/06/01/【漫谈-转】Unix Permissions/&name=【漫谈-转】Unix Permissions&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
