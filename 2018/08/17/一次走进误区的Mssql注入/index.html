@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="0x00 首发，【一次走进误区的Mssql注入 https://xz.aliyun.com/t/2596】  # 0x01 有问题吧?  抓包看到输入一个号码后，会有两个请求查询判断：       卡号是否存在； 卡号对应的个人信息；    初步判断：此处进行了数据库查询   # 0x02 进一步测试## Part Ⅰ 自动化工具  直接使用了sqlmap，同时首次实用工具时参数上添加了几个条件：">
+<meta name="keywords" content="mssql 注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一次&quot;走进误区&quot;的Mssql注入">
+<meta property="og:url" content="http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="0x00 首发，【一次走进误区的Mssql注入 https://xz.aliyun.com/t/2596】  # 0x01 有问题吧?  抓包看到输入一个号码后，会有两个请求查询判断：       卡号是否存在； 卡号对应的个人信息；    初步判断：此处进行了数据库查询   # 0x02 进一步测试## Part Ⅰ 自动化工具  直接使用了sqlmap，同时首次实用工具时参数上添加了几个条件：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://i.loli.net/2018/07/13/5b483fb875dda.png">
+<meta property="og:image" content="https://i.loli.net/2018/07/15/5b4b54bd4098e.png">
+<meta property="og:image" content="https://i.loli.net/2018/07/13/5b48452b10b81.png">
+<meta property="og:image" content="https://i.loli.net/2018/07/13/5b48446abeaf7.png">
+<meta property="og:image" content="https://i.loli.net/2018/08/17/5b768ad8db027.png">
+<meta property="og:image" content="https://i.loli.net/2018/07/13/5b4853fbccd61.png">
+<meta property="og:image" content="https://i.loli.net/2018/07/13/5b48556ec6dc4.png">
+<meta property="og:updated_time" content="2018-08-20T07:51:53.480Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一次&quot;走进误区&quot;的Mssql注入">
+<meta name="twitter:description" content="0x00 首发，【一次走进误区的Mssql注入 https://xz.aliyun.com/t/2596】  # 0x01 有问题吧?  抓包看到输入一个号码后，会有两个请求查询判断：       卡号是否存在； 卡号对应的个人信息；    初步判断：此处进行了数据库查询   # 0x02 进一步测试## Part Ⅰ 自动化工具  直接使用了sqlmap，同时首次实用工具时参数上添加了几个条件：">
+<meta name="twitter:image" content="https://i.loli.net/2018/07/13/5b483fb875dda.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>一次&#34;走进误区&#34;的Mssql注入</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/08/13/图形验证码大小可控可造成DOS攻击/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&text=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&is_video=false&description=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=一次&#34;走进误区&#34;的Mssql注入&body=Check out this article: http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&name=一次&#34;走进误区&#34;的Mssql注入&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00"><span class="toc-number">1.</span> <span class="toc-text">0x00</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-有问题吧"><span class="toc-number">2.</span> <span class="toc-text"># 0x01 有问题吧?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-进一步测试"><span class="toc-number">3.</span> <span class="toc-text"># 0x02 进一步测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅰ-自动化工具"><span class="toc-number">3.1.</span> <span class="toc-text">## Part Ⅰ 自动化工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅱ-手工注入"><span class="toc-number">3.2.</span> <span class="toc-text">## Part Ⅱ 手工注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#信息确认"><span class="toc-number">3.2.1.</span> <span class="toc-text">### 信息确认</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mssql注入"><span class="toc-number">3.2.2.</span> <span class="toc-text">### mssql注入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅲ-出库不出表？"><span class="toc-number">3.3.</span> <span class="toc-text">## Part Ⅲ 出库不出表？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#完成一次手注"><span class="toc-number">3.3.1.</span> <span class="toc-text">### 完成一次手注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路反思（当时自己的错误思路）"><span class="toc-number">3.3.2.</span> <span class="toc-text">### 思路反思（当时自己的错误思路）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-参考资源"><span class="toc-number">4.</span> <span class="toc-text"># 0x03 参考资源</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        一次&#34;走进误区&#34;的Mssql注入
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2018-08-16T16:00:00.000Z" itemprop="datePublished">2018-08-17</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/mssql-注入/">mssql 注入</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x00"><a href="#0x00" class="headerlink" title="0x00"></a>0x00</h2><blockquote>
+<p>首发，<a href="https://xz.aliyun.com/t/2596" target="_blank" rel="noopener">【一次走进误区的Mssql注入 https://xz.aliyun.com/t/2596】</a></p>
+</blockquote>
+<h2 id="0x01-有问题吧"><a href="#0x01-有问题吧" class="headerlink" title="# 0x01 有问题吧?"></a># 0x01 有问题吧?</h2><blockquote>
+<ul>
+<li>抓包看到输入一个号码后，会有两个请求查询判断：</li>
+</ul>
+</blockquote>
+<p><img src="https://i.loli.net/2018/07/13/5b483fb875dda.png" alt="请求判断"></p>
+<blockquote>
+<blockquote>
+<ol>
+<li>卡号是否存在；</li>
+<li>卡号对应的个人信息；</li>
+</ol>
+</blockquote>
+<ul>
+<li>初步判断：<strong><em>此处进行了数据库查询</em></strong></li>
+</ul>
+</blockquote>
+<h2 id="0x02-进一步测试"><a href="#0x02-进一步测试" class="headerlink" title="# 0x02 进一步测试"></a># 0x02 进一步测试</h2><h3 id="Part-Ⅰ-自动化工具"><a href="#Part-Ⅰ-自动化工具" class="headerlink" title="## Part Ⅰ 自动化工具"></a>## Part Ⅰ 自动化工具</h3><blockquote>
+<ul>
+<li><p>直接使用了sqlmap，同时首次实用工具时参数上添加了几个条件：</p>
+<blockquote>
+<ol>
+<li><p>“– delay 10”；</p>
+<blockquote>
+<p>为什么使用delay，因为考虑到测试对象的敏感程度，有waf等防护是必然的，请求的延时可以避免大量测试请求直接造成IP被封禁等一系列的影响，造成之后测试的硬性阻隔，当然，之后的测试发现，短时间内的频繁请求会被禁IP。</p>
+</blockquote>
+</li>
+<li><p>“–time-sec 15” ; // 考虑到时间盲注的延时</p>
+</li>
+<li><p>“–timeout 20” ; // 考虑到超时</p>
+</li>
+<li><p>“tamper”; // 混淆&amp;绕过</p>
+<blockquote>
+<p>此处的正常思路应是先尝试确认过滤了哪些字符，哪些没有被过滤，然后逐步构造payload，针对性的写tamper进行测试。</p>
+</blockquote>
+</li>
+</ol>
+</blockquote>
+<ul>
+<li><strong>自己使用自动化工具不能发现问题，判断此处不存在注入，可能是因为自带的tamper混淆没有能够成功构造出合适的payload. </strong></li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="Part-Ⅱ-手工注入"><a href="#Part-Ⅱ-手工注入" class="headerlink" title="## Part Ⅱ 手工注入"></a>## Part Ⅱ 手工注入</h3><h4 id="信息确认"><a href="#信息确认" class="headerlink" title="### 信息确认"></a>### 信息确认</h4><blockquote>
+<ul>
+<li>回到手工注入，首先需要判断什么数据库类型等数据库信息，之后可以针对性的进行构造；</li>
+</ul>
+<blockquote>
+<ol>
+<li>构造常规的payload “ ‘ and @@version ”，或是“ ‘ and @@version – ”提示语法错误；</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; &gt; payload1: ' select @@version </span><br><span class="line">&gt; &gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><strong>Tips：</strong></p>
+<blockquote>
+<ul>
+<li><strong>这里使用数据库“内置函数“进行测试，因为数据库查询的优先级原因，正常情况下会优先执行内置函数查询</strong></li>
+<li><strong>通过报错可以看到语法错误，以及通过报错信息搜集数据库信息，辅助确定数据库类型</strong></li>
+<li><strong>如果执行了构造的payload，那么页面返回信息会显示相关的信息</strong></li>
+</ul>
+</blockquote>
+<p><img src="https://i.loli.net/2018/07/15/5b4b54bd4098e.png" alt="payload报错"></p>
+</blockquote>
+<blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&gt; &gt; **上一次尝试select 语句有错误，换用另一payload进行测试，如下**</span><br><span class="line">&gt; &gt; payload2: /' and @@version    </span><br><span class="line">&gt; &gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+</blockquote>
+<p><img src="https://i.loli.net/2018/07/13/5b48452b10b81.png" alt="语法错误"></p>
+<blockquote>
+<p><strong>注：这个报错信息不是构造的payload参数中的，是其他代码的错误，并且注释符都无用，最后想到的可能性为，此处的“or a.xxxcode= ”语句是前面用户输入ID值得一部分，需要作为整体去数据库查询，只能闭合当前的payload，所以用下面的方法，再添加and语句，完成闭合 </strong></p>
+</blockquote>
+<figure class="highlight"><figcaption><span>lite</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt; payload4: ' and @@version&gt;0 and '1'='1</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p><img src="https://i.loli.net/2018/07/13/5b48446abeaf7.png" alt=""></p>
+<blockquote>
+<p><strong>注：</strong></p>
+<ul>
+<li><strong>这里的思路是结合数据库查询的优先级，使用数据库的内置函数，它的查询顺序优先于一般查询，因此此处使用数据库内置函数进行尝试；</strong></li>
+</ul>
+</blockquote>
+</blockquote>
+<h4 id="mssql注入"><a href="#mssql注入" class="headerlink" title="### mssql注入"></a>### mssql注入</h4><blockquote>
+<ul>
+<li>数据库类型确定：MSSQL</li>
+<li>爆破其他参数：</li>
+</ul>
+<blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; &gt; payload5: and db_name()&gt;0 and &apos;1&apos;=&apos;1 // 当前数据库</span><br><span class="line">&gt; &gt; payload6: and user_name()&gt;0 and &apos;1&apos;=&apos;1 // 当前用户</span><br><span class="line">&gt; &gt; payload7: and @@servername&gt;0 and &apos;1&apos;=&apos;1 // 主机名</span><br><span class="line">&gt; &gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>注：爆破进行到下一步，爆破表的时候发现无论怎么构造，都是没有回显的，查找了一些文章，有人提到了Mssql 2008 出库不出表([</strong>你们有遇到过mssql2008出裤不出表的情况吗?<strong>](<a href="https://xz.aliyun.com/t/2270))的情况，这么尴尬，这么唬人的么？" target="_blank" rel="noopener">https://xz.aliyun.com/t/2270))的情况，这么尴尬，这么唬人的么？</a></strong></p>
+</blockquote>
+<h3 id="Part-Ⅲ-出库不出表？"><a href="#Part-Ⅲ-出库不出表？" class="headerlink" title="## Part Ⅲ 出库不出表？"></a>## Part Ⅲ 出库不出表？</h3><blockquote>
+<p>和小伙伴讨论讨论分析了一下，这里为什么会没有任何回显，其实构造的payload是正常执行的，但是返回和正常返回一致，再回想一遍整个过程，发现了关键点的所在，也就清晰了整个流程；</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/08/17/5b768ad8db027.png" alt="逻辑流程图"></p>
+<blockquote>
+<p><strong>Bingo！！！！ ！！</strong></p>
+<p><strong>重点在用户输入的ID和你使用or还是and连接语句</strong></p>
+<ul>
+<li>or : 使用or连接，那么无论ID处的查询结果是0还是1，均会触发到下一步，比较payload查询到的参数与0进行大小比较报错进而达到”爆表“等效果；</li>
+<li>and : 使用and连接，那么执行结果分为两种显示情况<ul>
+<li>ID查询返回结果为0，无论后半部分查询结果如何返回，最终结果均为0；</li>
+<li>ID查询返回结果为1，结合后半部分查询结果为1，最终查询结果为1，触发比较，”爆表“、”爆字段“ and etc.</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="完成一次手注"><a href="#完成一次手注" class="headerlink" title="### 完成一次手注"></a>### 完成一次手注</h4><blockquote>
+<ul>
+<li>社会工程学</li>
+</ul>
+<blockquote>
+<p>通过搜索引擎，社一个存在的用户ID号，用来进行查询，可以在这一步的两个请求，分别判断为存在以及返回用户信息：</p>
+</blockquote>
+<p><img src="https://i.loli.net/2018/07/13/5b4853fbccd61.png" alt="有数据返回"></p>
+<ul>
+<li>出库不出表？</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt; payload: and (SELECT top 1 Name FROM Master..SysDatabases)&gt;0 // 爆其他数据库</span><br><span class="line">&gt; payload: and (select top 1 name from [数据库名字].sys.all_objects where type=&apos;U&apos; AND is_ms_shipped=0)&gt;0 // 爆表</span><br><span class="line">&gt; payload: and (select top 1 COLUMN_NAME from[数据库名字].information_schema.columns where TABLE_NAME=&apos;表名&apos;)&gt;0 // 爆字段</span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>​    </p>
+<ul>
+<li>下图已到字段为止，ok，收工.</li>
+</ul>
+<p><img src="https://i.loli.net/2018/07/13/5b48556ec6dc4.png" alt=""></p>
+</blockquote>
+<h4 id="思路反思（当时自己的错误思路）"><a href="#思路反思（当时自己的错误思路）" class="headerlink" title="### 思路反思（当时自己的错误思路）"></a>### 思路反思（当时自己的错误思路）</h4><blockquote>
+<p>这是一个用户输入ID的位置，输入ID之后进行了两个操作：</p>
+<blockquote>
+<ul>
+<li>查询ID是否已存在，无论如何构造，该返回结果只是0或1；</li>
+<li>查询ID对应的信息，如果已存在，返回对应用户信息，不存在，则返回“[]”，数据为空；</li>
+</ul>
+<p>注意：</p>
+<ul>
+<li><strong>这两个过程不存在逻辑关系，相互独立，不管是否已存在，都会请求查询ID对应的用户数据；</strong></li>
+<li><strong>此处注入如果用一个不存在的用户ID，当查询结果显示用户ID并不不存在的时，停止进一步查询其他数据，所以返回结果均为空，在进行爆表爆字段等尝试的时候，也不会有任何的回显</strong></li>
+</ul>
+</blockquote>
+<p>当时自己没有理清晰整个查询的流程以及使用什么方式连接，所以误导自己进入了误区，希望和我一样没有”精通“数据库的人阔以引以为戒。em……</p>
+</blockquote>
+<h2 id="0x03-参考资源"><a href="#0x03-参考资源" class="headerlink" title="# 0x03 参考资源"></a># 0x03 参考资源</h2><blockquote>
+<p>难得这次帮自己丰富了一下经验，同时收获也很大，个中滋味就是很满足，小小满足感~~~</p>
+<p>而且这次在搜索解决问题的过程中，发现了很不错的网站，可以学习参考。</p>
+<ul>
+<li><a href="http://pentestmonkey.net/cheat-sheet/sql-injection/mssql-sql-injection-cheat-sheet" target="_blank" rel="noopener">http://pentestmonkey.net/cheat-sheet/sql-injection/mssql-sql-injection-cheat-sheet</a></li>
+</ul>
+</blockquote>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x00"><span class="toc-number">1.</span> <span class="toc-text">0x00</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-有问题吧"><span class="toc-number">2.</span> <span class="toc-text"># 0x01 有问题吧?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-进一步测试"><span class="toc-number">3.</span> <span class="toc-text"># 0x02 进一步测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅰ-自动化工具"><span class="toc-number">3.1.</span> <span class="toc-text">## Part Ⅰ 自动化工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅱ-手工注入"><span class="toc-number">3.2.</span> <span class="toc-text">## Part Ⅱ 手工注入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#信息确认"><span class="toc-number">3.2.1.</span> <span class="toc-text">### 信息确认</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#mssql注入"><span class="toc-number">3.2.2.</span> <span class="toc-text">### mssql注入</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Part-Ⅲ-出库不出表？"><span class="toc-number">3.3.</span> <span class="toc-text">## Part Ⅲ 出库不出表？</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#完成一次手注"><span class="toc-number">3.3.1.</span> <span class="toc-text">### 完成一次手注</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#思路反思（当时自己的错误思路）"><span class="toc-number">3.3.2.</span> <span class="toc-text">### 思路反思（当时自己的错误思路）</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-参考资源"><span class="toc-number">4.</span> <span class="toc-text"># 0x03 参考资源</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&text=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&is_video=false&description=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=一次&#34;走进误区&#34;的Mssql注入&body=Check out this article: http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&title=一次&#34;走进误区&#34;的Mssql注入"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2018/08/17/一次走进误区的Mssql注入/&name=一次&#34;走进误区&#34;的Mssql注入&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2018 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
