@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="# 0x01 前言文章首发在先知社区-“逻辑让我崩溃之越权姿势分享(续集)” 上回书说道~说道哪儿忘了~我们接着再说说。【PS: 这是自己在平时的测试中积累并值得分享的一些测试经验，可能不能将问题探究到多深入，希望文中的思路能有所用。】 # 0x02 “躲起来的”Form表单## 1. 场景就像小节标题提到的一样，留意那些“躲起来的”Form表单，很多场景下你是否遇到过点击触发一个功能请求，但是返">
+<meta name="keywords" content="越权姿势">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑让我崩溃之越权姿势分享(续集)">
+<meta property="og:url" content="http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="# 0x01 前言文章首发在先知社区-“逻辑让我崩溃之越权姿势分享(续集)” 上回书说道~说道哪儿忘了~我们接着再说说。【PS: 这是自己在平时的测试中积累并值得分享的一些测试经验，可能不能将问题探究到多深入，希望文中的思路能有所用。】 # 0x02 “躲起来的”Form表单## 1. 场景就像小节标题提到的一样，留意那些“躲起来的”Form表单，很多场景下你是否遇到过点击触发一个功能请求，但是返">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140316-91c5e2ea-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140336-9d843b68-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140351-a6b0a85c-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140414-b46b1950-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140442-c530816c-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140504-d21a3418-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140518-dace4cf2-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140534-e3ff6216-238b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129142332-66d8c09a-238e-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140627-03a65408-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140653-133dfede-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140737-2d6462ee-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140804-3db7b4d4-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140812-420c733a-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140835-4fdb6a02-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140853-5a624f7c-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140912-661e9672-238c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129145410-ae51b4be-2392-1.png">
+<meta property="og:updated_time" content="2019-02-07T11:12:18.541Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="逻辑让我崩溃之越权姿势分享(续集)">
+<meta name="twitter:description" content="# 0x01 前言文章首发在先知社区-“逻辑让我崩溃之越权姿势分享(续集)” 上回书说道~说道哪儿忘了~我们接着再说说。【PS: 这是自己在平时的测试中积累并值得分享的一些测试经验，可能不能将问题探究到多深入，希望文中的思路能有所用。】 # 0x02 “躲起来的”Form表单## 1. 场景就像小节标题提到的一样，留意那些“躲起来的”Form表单，很多场景下你是否遇到过点击触发一个功能请求，但是返">
+<meta name="twitter:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20190129140316-91c5e2ea-238b-1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>逻辑让我崩溃之越权姿势分享(续集)</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2018/12/13/逻辑让我崩溃之越权姿势分享/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&text=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&is_video=false&description=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逻辑让我崩溃之越权姿势分享(续集)&body=Check out this article: http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&name=逻辑让我崩溃之越权姿势分享(续集)&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-前言"><span class="toc-number">1.</span> <span class="toc-text"># 0x01 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-“躲起来的”Form表单"><span class="toc-number">2.</span> <span class="toc-text"># 0x02 “躲起来的”Form表单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景"><span class="toc-number">2.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例"><span class="toc-number">2.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-多说几句"><span class="toc-number">2.3.</span> <span class="toc-text">## 3. 多说几句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-“犄角旮旯”的越权"><span class="toc-number">3.</span> <span class="toc-text"># 0x03 “犄角旮旯”的越权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-1"><span class="toc-number">3.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-1"><span class="toc-number">3.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-废话几句"><span class="toc-number">3.3.</span> <span class="toc-text">## 3. 废话几句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-鸡肋越权"><span class="toc-number">4.</span> <span class="toc-text"># 0x03 鸡肋越权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-2"><span class="toc-number">4.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-2"><span class="toc-number">4.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-小结"><span class="toc-number">4.3.</span> <span class="toc-text">## 3. 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-再谈HPP"><span class="toc-number">5.</span> <span class="toc-text"># 0x04 再谈HPP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-3"><span class="toc-number">5.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-3"><span class="toc-number">5.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-无废话可说"><span class="toc-number">5.3.</span> <span class="toc-text">## 3. 无废话可说</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-最后"><span class="toc-number">6.</span> <span class="toc-text">0x05 最后</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        逻辑让我崩溃之越权姿势分享(续集)
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-02-05T16:00:00.000Z" itemprop="datePublished">2019-02-06</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/越权姿势/">越权姿势</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-前言"><a href="#0x01-前言" class="headerlink" title="# 0x01 前言"></a># 0x01 前言</h2><p>文章首发在<a href="https://xz.aliyun.com/t/4003" target="_blank" rel="noopener">先知社区-“逻辑让我崩溃之越权姿势分享(续集)”</a></p>
+<p>上回书说道~说道哪儿忘了~我们接着再说说。<br>【PS: 这是自己在平时的测试中积累并值得分享的一些测试经验，可能不能将问题探究到多深入，希望文中的思路能有所用。】</p>
+<h2 id="0x02-“躲起来的”Form表单"><a href="#0x02-“躲起来的”Form表单" class="headerlink" title="# 0x02 “躲起来的”Form表单"></a># 0x02 “躲起来的”Form表单</h2><h3 id="1-场景"><a href="#1-场景" class="headerlink" title="## 1. 场景"></a>## 1. 场景</h3><p>就像小节标题提到的一样，留意那些“躲起来的”Form表单，很多场景下你是否遇到过点击触发一个功能请求，但是返回的是空白或者“无记录”的提示，请求中不包含任何用户参数，这个时候你留意了，是不是有什么东西是你遗漏掉了，遗漏了什么触发条件？</p>
+<h3 id="2-案例"><a href="#2-案例" class="headerlink" title="## 2. 案例"></a>## 2. 案例</h3><p>如图有一个这样的功能点，点击“信用卡”功能后，请求返回告诉你，该用户查询无记录。这个时候你要淡定了，So what？</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140316-91c5e2ea-238b-1.png" alt="案例101"></p>
+<p>接下来你要做的是什么？对接口进行请求构造Fuzz？客官且慢……怕是你需要再确认一下，那个躲在Form表单里的action是不是为你早就备好了。</p>
+<p>让我们看图说话。这是点击“分期付款”功能时候的请求，查询到当前登陆用户没有下挂账户，但是留意到最下面的那个hidden起来的form表单了某？</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140336-9d843b68-238b-1.png" alt="案例102"></p>
+<p>让我们稍加修改，看看效果如何？看图说话。<br>将input框稍作修改，添加一个value，给前端添加一点可选择的账号的空隙余地。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140351-a6b0a85c-238b-1.png" alt="案例103"><br><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140414-b46b1950-238b-1.png" alt="案例104"></p>
+<p>再敲个回车，看看效果，看看是否后端已经对这个接口做了鉴权呢？是否可以~~~Bingo.</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140442-c530816c-238b-1.png" alt="案例105"></p>
+<h3 id="3-多说几句"><a href="#3-多说几句" class="headerlink" title="## 3. 多说几句"></a>## 3. 多说几句</h3><p>上面的案例需要注意几点：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">* 是否存在隐藏的form表单；</span><br><span class="line">* 后端是否对此接口的查询操作作了鉴权判断；</span><br></pre></td></tr></table></figure></p>
+<h2 id="0x03-“犄角旮旯”的越权"><a href="#0x03-“犄角旮旯”的越权" class="headerlink" title="# 0x03 “犄角旮旯”的越权"></a># 0x03 “犄角旮旯”的越权</h2><h3 id="1-场景-1"><a href="#1-场景-1" class="headerlink" title="## 1. 场景"></a>## 1. 场景</h3><p>”犄角旮旯“的越权，说起来是犄角旮旯，但其实真实有人测试的时候估计每个能点的地方都会触发一遍，所以你也会发现总有一些点光看按钮看不出个所以然。</p>
+<h3 id="2-案例-1"><a href="#2-案例-1" class="headerlink" title="## 2. 案例"></a>## 2. 案例</h3><p>有这么一个查询接口查询历史交易明细，图中所示：<br><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140504-d21a3418-238b-1.png" alt="案例201"><br>选择查询之后，出现了几个按钮，“保存”、“打印”、“显示所有”、“保存所有”，一般情况说来“查看明细”、“查看详情”、“xx详情”等描述的功能点都对应着某一流水单号的记录情况，如果应用的处理方式不是在功能请求时全部返回所有订单数据的话，那么这一点是极有可能存在问题的点。</p>
+<p>此处的“详情”功能处已经做了鉴权，无法通过修改流水单号查询他人信息。但问题点出在“显示所有”的功能点，应用的逻辑是在查询全部记录时，会为每个用户对应一个id号，那么此处可以直接批量去查他人的账户交易信息，并且可以保存下载。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140518-dace4cf2-238b-1.png" alt="案例202"></p>
+<p>如下图所示，查询所有数据时，请求中包含有FileName参数，为保存数据生成文档命名做准备。那剩下的只是遍历参数就好了。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140534-e3ff6216-238b-1.png" alt="案例203"></p>
+<h3 id="3-废话几句"><a href="#3-废话几句" class="headerlink" title="## 3. 废话几句"></a>## 3. 废话几句</h3><p>案例中涉及到的点为一些看起来没有用但是真实存在漏洞的接口，所以案例2的结论就是注意那些看似无害的”犄角旮旯“。常见的几点如：查询、详情、明细、下载记录等等功能点。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129142332-66d8c09a-238e-1.png" alt=""></p>
+<h2 id="0x03-鸡肋越权"><a href="#0x03-鸡肋越权" class="headerlink" title="# 0x03 鸡肋越权"></a># 0x03 鸡肋越权</h2><h3 id="1-场景-2"><a href="#1-场景-2" class="headerlink" title="## 1. 场景"></a>## 1. 场景</h3><p>说是鸡肋越权，是因为在测试的时用了自己准备的两个测试账号，同时因为需要涉及到cookie的替换等操作，有人可能会说：“这也太扯了，你都替换了cookie参数了，查看别人的信息那是肯定可以的啊！”，但其实如果我下面的案例与你想的多少有些不符，也正好咱们一起来讨论这个场景下的替换，是否算不算是越权呢。</p>
+<h3 id="2-案例-2"><a href="#2-案例-2" class="headerlink" title="## 2. 案例"></a>## 2. 案例</h3><p>此案例中涉及到的信息如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">A和B两个测试账号，A为攻击者，B为受害者</span><br><span class="line">账户A未设置支付密码、B账户未知支付密码</span><br></pre></td></tr></table></figure>
+<p>现同时登陆两个账号，获取cookie参数中的“mssc_sid”值。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140627-03a65408-238c-1.png" alt="案例3-0012"></p>
+<p>之后对A账户进行操作，查看账户状态，显示未设置支付密码</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140653-133dfede-238c-1.png" alt="案例3-0013"></p>
+<p>随后进行设置密码，点击<strong>“设置密码”</strong>后，会首先发送请求校验当前cookie参数中的mssc_sid值，通过这个值来对当前用户身份进行识别。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">注：</span><br><span class="line">这里为什么要用一个未设置支付密码的账户A呢？因为“未设置支付密码账户”在设置密码时与“已设置支付密码账户”不同，不需要校验原交易密码，可以直接进行设置操作。</span><br></pre></td></tr></table></figure>
+<p>此过程中，拦截请求将此参数替换为B账户mssc_sid值，绕过原密码校验的同时，第一步<strong>“校验身份”</strong>会通过此账户识别为账户B，并进行到第二步，设置支付密码。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140737-2d6462ee-238c-1.png" alt="案例3-0014"></p>
+<p>设置新的支付密码，有人会问，如果还有第二步，是不是也要同样的拦截请求并且修改mssc_sid参数，答案是<strong>当然不用了</strong>。虽然在这一步提交的请求包中mssc_sid参数值为A账户，后端以第一步校验的身份去设置密码，也就是设置B账户的交易密码会被修改，So，B账户支付密码被修改咯。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140804-3db7b4d4-238c-1.png" alt="案例3-002"></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140812-420c733a-238c-1.png" alt="案例3-0016"></p>
+<h3 id="3-小结"><a href="#3-小结" class="headerlink" title="## 3. 小结"></a>## 3. 小结</h3><p>这个案例有点鸡肋，并不可以任意的去重置某一用户的支付密码，希望给你了一点提示，下次遇到同样的参数，可以测试是否存在和案例中一样的问题逻辑。或许，当你遇到同样的情景时，你的漏洞参数是有规律可循的。</p>
+<h2 id="0x04-再谈HPP"><a href="#0x04-再谈HPP" class="headerlink" title="# 0x04 再谈HPP"></a># 0x04 再谈HPP</h2><h3 id="1-场景-3"><a href="#1-场景-3" class="headerlink" title="## 1. 场景"></a>## 1. 场景</h3><p>HPP简称“HTTP Parameter Pollution”，HTTP参数污染，此处指就是给相同参数赋上两个或两个以上的值，导致应用解析错误出现越权漏洞。话不多说，相信有很多人都知道这种类型问题。</p>
+<h3 id="2-案例-3"><a href="#2-案例-3" class="headerlink" title="## 2. 案例"></a>## 2. 案例</h3><p>此案例以修改账户别名为例，通过HPP的方式可以修改所有登陆账户的别名和手机号码。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140835-4fdb6a02-238c-1.png" alt="案例4-001"></p>
+<p>在用户A登陆后，存在这样一个功能设置点，可以设置修改A账户的账户别名。便于用户在进行各类交易时操作，功能类似于电话本，方便查找使用。</p>
+<p>问题出在修改这个功能点，当你设置A账户别名、手机号后，选择“确认修改“时，请求中包含一个PayeeId参数，对比两个不同的参数之后发现此处参数每个参数均代表唯一用户且在用户登陆状态下有效，另外我们可以看出，这个PayeeId编号前14位不变，后4位规律递增或随机的特征，OK，废话说多了，回到重点。</p>
+<p>此处请求将别名设置为”1166661test“、手机号码设置为A账户手机号码，将B账户的PayeeId参数附带到当前账户PayeeId后，发现请求可以正常请求。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140853-5a624f7c-238c-1.png" alt="案例4-002"></p>
+<p>通过最直观的方式，登陆B账户查看别名设置情况，我们不难发现B账户的账户别名已经设置为”1166661test“，同时手机号码也改为了A账户的手机号码。</p>
+<p><strong>PS: 也许有人会问这个地方可以批量么？回答是当然可以，因为漏洞参数虽然是20位长度的字符串，但前14位不变，后四位就算不是递增，爆破的难度也不大。另结合此处的存储型XSS，可以将可利用程度提升。</strong></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129140912-661e9672-238c-1.png" alt="案例4-003"></p>
+<h3 id="3-无废话可说"><a href="#3-无废话可说" class="headerlink" title="## 3. 无废话可说"></a>## 3. 无废话可说</h3><p>HPP已经有很多人知道的，所以没有什么特别要说明的，如果有人想要了解的话，自行去搜索吧，有很多很详细的解释。</p>
+<h2 id="0x05-最后"><a href="#0x05-最后" class="headerlink" title="0x05 最后"></a>0x05 最后</h2><p>自己尝试根据这两篇文做了个流程图，每个方式方法的最终归属看起来都还是回归到了常规越权，希望下次我还能发现不一样的问题来分享。</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20190129145410-ae51b4be-2392-1.png" alt=""></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-前言"><span class="toc-number">1.</span> <span class="toc-text"># 0x01 前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x02-“躲起来的”Form表单"><span class="toc-number">2.</span> <span class="toc-text"># 0x02 “躲起来的”Form表单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景"><span class="toc-number">2.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例"><span class="toc-number">2.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-多说几句"><span class="toc-number">2.3.</span> <span class="toc-text">## 3. 多说几句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-“犄角旮旯”的越权"><span class="toc-number">3.</span> <span class="toc-text"># 0x03 “犄角旮旯”的越权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-1"><span class="toc-number">3.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-1"><span class="toc-number">3.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-废话几句"><span class="toc-number">3.3.</span> <span class="toc-text">## 3. 废话几句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x03-鸡肋越权"><span class="toc-number">4.</span> <span class="toc-text"># 0x03 鸡肋越权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-2"><span class="toc-number">4.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-2"><span class="toc-number">4.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-小结"><span class="toc-number">4.3.</span> <span class="toc-text">## 3. 小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x04-再谈HPP"><span class="toc-number">5.</span> <span class="toc-text"># 0x04 再谈HPP</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-场景-3"><span class="toc-number">5.1.</span> <span class="toc-text">## 1. 场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-案例-3"><span class="toc-number">5.2.</span> <span class="toc-text">## 2. 案例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-无废话可说"><span class="toc-number">5.3.</span> <span class="toc-text">## 3. 无废话可说</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0x05-最后"><span class="toc-number">6.</span> <span class="toc-text">0x05 最后</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&text=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&is_video=false&description=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逻辑让我崩溃之越权姿势分享(续集)&body=Check out this article: http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&title=逻辑让我崩溃之越权姿势分享(续集)"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/02/06/逻辑让我崩溃之越权姿势分享(续集)/&name=逻辑让我崩溃之越权姿势分享(续集)&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
