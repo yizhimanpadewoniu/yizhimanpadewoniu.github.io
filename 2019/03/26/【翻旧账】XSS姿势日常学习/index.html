@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+<meta name="keywords" content="xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻旧账】XSS姿势日常学习">
+<meta property="og:url" content="http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/06/59366445d1bf9.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/07/5937ff5b3b87f.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/07/5937ff5b54b87.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a04149cd37.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a0414b45c5.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a063b7fc7b.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a069481a55.png">
+<meta property="og:updated_time" content="2019-03-26T01:26:29.845Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻旧账】XSS姿势日常学习">
+<meta name="twitter:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>【翻旧账】XSS姿势日常学习</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/03/14/降级安装jre/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&text=【翻旧账】XSS姿势日常学习"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&is_video=false&description=【翻旧账】XSS姿势日常学习"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【翻旧账】XSS姿势日常学习&body=Check out this article: http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&name=【翻旧账】XSS姿势日常学习&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×01-叉插×"><span class="toc-number">1.</span> <span class="toc-text">## 0×01 叉插×</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#example-1"><span class="toc-number">1.1.</span> <span class="toc-text">### example-1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-2"><span class="toc-number">1.2.</span> <span class="toc-text">### example-2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-3"><span class="toc-number">1.3.</span> <span class="toc-text">### example-3</span></a></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        【翻旧账】XSS姿势日常学习
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-03-25T16:00:00.000Z" itemprop="datePublished">2019-03-26</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/xss/">xss</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0×01-叉插×"><a href="#0×01-叉插×" class="headerlink" title="## 0×01 叉插×"></a>## 0×01 叉插×</h2><p>看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路.</p>
+<p>这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。</p>
+<h3 id="example-1"><a href="#example-1" class="headerlink" title="### example-1"></a>### example-1</h3><p>修改自己的简历信息，用户名限制了50的长度</p>
+<p><img src="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png" alt="2017060501.png"></p>
+<p>过滤了一些标签，img标签没有被过滤，所以尝试插入，查看源码的时候发现插入的英文标点符号被替换为了中文的，所以普通的姿势应该是搞不定的了，换个地方搞，特此记录.</p>
+<p><img src="https://ooo.0o0.ooo/2017/06/06/59366445d1bf9.png" alt="2017060502.png"></p>
+<h3 id="example-2"><a href="#example-2" class="headerlink" title="### example-2"></a>### example-2</h3><p>今天遇到的情况是，搜索框反射型XSS。</p>
+<p>用AWVS扫到了存在XSS，然后就开始各种尝试，直到用firebug看到报错看到源码，接下来开始努力构造闭合创造alert(1)。所以闭合了，但是并没有弹窗，问我斌哥之后成功弹窗.</p>
+<p><img src="https://ooo.0o0.ooo/2017/06/07/5937ff5b3b87f.png" alt="2017060601.png"></p>
+<blockquote>
+<p>So, 什么才是正确的姿势呢?<br>“要跳出到函数内的一些判断(if等)外，尝试跳出函数才是一个好的反射xss.不然需要交互.”</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/06/07/5937ff5b54b87.png" alt="2017060602.png"></p>
+<blockquote>
+<pre><code>和前一天相比,今天的过滤了&quot;&lt;&gt;&quot;这些符号，并对这些符号进行了转义.
+</code></pre></blockquote>
+<h3 id="example-3"><a href="#example-3" class="headerlink" title="### example-3"></a>### example-3</h3><p>今天遇到的情况,AWVS告诉我此处有个XSS，为毛自己搞不出来捏?</p>
+<p><img src="https://ooo.0o0.ooo/2017/06/09/593a04149cd37.png" alt="2017060801.png"><br><img src="https://ooo.0o0.ooo/2017/06/09/593a0414b45c5.png" alt="2017060802.png"></p>
+<blockquote>
+<p>两张图结合起来看,应该是极有可能存在XSS的，但是多次尝试之后无果，这里过滤掉了&lt;()等符号，所以又去问斌哥，斌哥乃何许人也，说时迟那时快，啧啧~</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/06/09/593a063b7fc7b.png" alt="2017060803.png"></p>
+<p>所以又长见识了.</p>
+<p><img src="https://ooo.0o0.ooo/2017/06/09/593a069481a55.png" alt="2017060804.png"></p>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×01-叉插×"><span class="toc-number">1.</span> <span class="toc-text">## 0×01 叉插×</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#example-1"><span class="toc-number">1.1.</span> <span class="toc-text">### example-1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-2"><span class="toc-number">1.2.</span> <span class="toc-text">### example-2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#example-3"><span class="toc-number">1.3.</span> <span class="toc-text">### example-3</span></a></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&text=【翻旧账】XSS姿势日常学习"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&is_video=false&description=【翻旧账】XSS姿势日常学习"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【翻旧账】XSS姿势日常学习&body=Check out this article: http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&title=【翻旧账】XSS姿势日常学习"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/&name=【翻旧账】XSS姿势日常学习&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

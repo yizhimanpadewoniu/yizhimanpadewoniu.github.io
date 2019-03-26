@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="## 0×01 怎么开头这个测试的对象说来很巧，原本站点是没有添加任何过滤的，直接通过在url末尾简单的绕过即可弹框。  http://www.test.com/test.php?name=&amp;apos;&amp;quot;&amp;gt;&amp;lt;img src=1 onerror=alert(1)&amp;gt;  该漏洞已经修复，需要进行复测。 ## 0×02 难度升级  上来访问一下就看到了这个，直接404，那么可能">
+<meta name="keywords" content="xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【翻旧账】XSS姿势日常学习之PHP $_Request">
+<meta property="og:url" content="http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="## 0×01 怎么开头这个测试的对象说来很巧，原本站点是没有添加任何过滤的，直接通过在url末尾简单的绕过即可弹框。  http://www.test.com/test.php?name=&amp;apos;&amp;quot;&amp;gt;&amp;lt;img src=1 onerror=alert(1)&amp;gt;  该漏洞已经修复，需要进行复测。 ## 0×02 难度升级  上来访问一下就看到了这个，直接404，那么可能">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/07/05/595c89b939d9d.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/07/05/595c8b537e3b5.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/07/05/595c8c13949bd.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/07/05/595c8e32a3e6a.png">
+<meta property="og:image" content="https://ooo.0o0.ooo/2017/07/05/595c9bb5dccdd.png">
+<meta property="og:updated_time" content="2019-03-26T01:34:33.275Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【翻旧账】XSS姿势日常学习之PHP $_Request">
+<meta name="twitter:description" content="## 0×01 怎么开头这个测试的对象说来很巧，原本站点是没有添加任何过滤的，直接通过在url末尾简单的绕过即可弹框。  http://www.test.com/test.php?name=&amp;apos;&amp;quot;&amp;gt;&amp;lt;img src=1 onerror=alert(1)&amp;gt;  该漏洞已经修复，需要进行复测。 ## 0×02 难度升级  上来访问一下就看到了这个，直接404，那么可能">
+<meta name="twitter:image" content="https://ooo.0o0.ooo/2017/07/05/595c89b939d9d.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>【翻旧账】XSS姿势日常学习之PHP $_Request</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2019/03/26/【翻旧账】XSS姿势日常学习/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&text=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&is_video=false&description=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【翻旧账】XSS姿势日常学习之PHP $_Request&body=Check out this article: http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&name=【翻旧账】XSS姿势日常学习之PHP $_Request&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×01-怎么开头"><span class="toc-number">1.</span> <span class="toc-text">## 0×01 怎么开头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×02-难度升级"><span class="toc-number">2.</span> <span class="toc-text">## 0×02 难度升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×03-去找大神"><span class="toc-number">3.</span> <span class="toc-text">## 0×03 去找大神</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×04-欠一个payload"><span class="toc-number">4.</span> <span class="toc-text">## 0×04 欠一个payload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×05-聊天记录就是最好的笔记了"><span class="toc-number">5.</span> <span class="toc-text">## 0×05 聊天记录就是最好的笔记了</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#“这个点需要一个脑洞，一点也不难-”"><span class="toc-number">5.0.1.</span> <span class="toc-text">#### “这个点需要一个脑洞，一点也不难.”</span></a></li></ol></li></ol></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        【翻旧账】XSS姿势日常学习之PHP $_Request
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-03-25T16:00:00.000Z" itemprop="datePublished">2019-03-26</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/xss/">xss</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0×01-怎么开头"><a href="#0×01-怎么开头" class="headerlink" title="## 0×01 怎么开头"></a>## 0×01 怎么开头</h2><p>这个测试的对象说来很巧，原本站点是没有添加任何过滤的，直接通过在url末尾简单的绕过即可弹框。</p>
+<blockquote>
+<pre><code>http://www.test.com/test.php?name=&apos;&quot;&gt;&lt;img src=1 onerror=alert(1)&gt;
+</code></pre></blockquote>
+<p>该漏洞已经修复，需要进行复测。</p>
+<h2 id="0×02-难度升级"><a href="#0×02-难度升级" class="headerlink" title="## 0×02 难度升级"></a>## 0×02 难度升级</h2><p><img src="https://ooo.0o0.ooo/2017/07/05/595c89b939d9d.png" alt="fuce-01.png"></p>
+<blockquote>
+<p>上来访问一下就看到了这个，直接404，那么可能是已经修复了？还是链接已经失效(这个是自己YY的，可能点儿用没有2333)</p>
+</blockquote>
+<blockquote>
+<p>修改为正常的url打开看看是什么情况。</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/07/05/595c8b537e3b5.png" alt="fuce-02.png"></p>
+<blockquote>
+<p>可以正常访问，那已经修复了？所以用xsstrike来跑跑，前几天从twitter上看到大家都在转，正好抓到机会来测试</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/07/05/595c8c13949bd.png" alt="fuce-03.png"></p>
+<blockquote>
+<p>看到这个的时候个人还觉得这也算修复了？果然还是被扫出来，换个姿势就可以，这么简单，结果就是浏览器打开的全是404，顿时就是各种卧槽。</p>
+</blockquote>
+<h2 id="0×03-去找大神"><a href="#0×03-去找大神" class="headerlink" title="## 0×03 去找大神"></a>## 0×03 去找大神</h2><blockquote>
+<p>自己通过源码看到这里在通过url进行请求的时候，有一小段js是过滤掉了url中的字符，重定义到了404的。<br>还是去找大神,哈哈，因为总觉得还是可以弹窗的，尽管自己可能是YY。</p>
+</blockquote>
+<p><img src="https://ooo.0o0.ooo/2017/07/05/595c8e32a3e6a.png" alt="fuce-04.png"></p>
+<blockquote>
+<p>大神告诉以下几点:  </p>
+</blockquote>
+<blockquote>
+<ul>
+<li>xsstrike 等xss扫描器只要不是基于webkit都是很容易误报的</li>
+<li>这个点一开始自己用浏览器的js的解析逻辑，让后面的js先执行(目前看来没有方法)</li>
+<li>不从js出发，猜php源码，结合js和源码，就可以得到答案</li>
+<li>经过测试，后端是使用_requests来处理请求的，不是_get</li>
+<li>所以问题的答案就很明显了</li>
+</ul>
+</blockquote>
+<p>当吃在路上出完饭的我只能一路手机搜索，一路往回奔试试自己绞尽脑汁get到的点是不是对的，23333.还好，思路正确，没毛病。</p>
+<p><img src="https://ooo.0o0.ooo/2017/07/05/595c9bb5dccdd.png" alt="fuce-06.png"></p>
+<h2 id="0×04-欠一个payload"><a href="#0×04-欠一个payload" class="headerlink" title="## 0×04 欠一个payload"></a>## 0×04 欠一个payload</h2><h2 id="0×05-聊天记录就是最好的笔记了"><a href="#0×05-聊天记录就是最好的笔记了" class="headerlink" title="## 0×05 聊天记录就是最好的笔记了"></a>## 0×05 聊天记录就是最好的笔记了</h2><blockquote>
+<pre><code>审计经验(php代码审计)
+php有集中获得请求的方式，_get,或者_post,还可能是_request
+尝试之后发现答案出来了
+</code></pre></blockquote>
+<h4 id="“这个点需要一个脑洞，一点也不难-”"><a href="#“这个点需要一个脑洞，一点也不难-”" class="headerlink" title="#### “这个点需要一个脑洞，一点也不难.”"></a>#### “这个点需要一个脑洞，一点也不难.”</h4>
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0×01-怎么开头"><span class="toc-number">1.</span> <span class="toc-text">## 0×01 怎么开头</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×02-难度升级"><span class="toc-number">2.</span> <span class="toc-text">## 0×02 难度升级</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×03-去找大神"><span class="toc-number">3.</span> <span class="toc-text">## 0×03 去找大神</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×04-欠一个payload"><span class="toc-number">4.</span> <span class="toc-text">## 0×04 欠一个payload</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#0×05-聊天记录就是最好的笔记了"><span class="toc-number">5.</span> <span class="toc-text">## 0×05 聊天记录就是最好的笔记了</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#“这个点需要一个脑洞，一点也不难-”"><span class="toc-number">5.0.1.</span> <span class="toc-text">#### “这个点需要一个脑洞，一点也不难.”</span></a></li></ol></li></ol></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&text=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&is_video=false&description=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【翻旧账】XSS姿势日常学习之PHP $_Request&body=Check out this article: http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&title=【翻旧账】XSS姿势日常学习之PHP $_Request"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习POST/&name=【翻旧账】XSS姿势日常学习之PHP $_Request&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+

