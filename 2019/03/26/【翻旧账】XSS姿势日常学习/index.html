@@ -6,13 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-    <meta name="description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+    <meta name="description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有看到，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以尝试">
 <meta name="keywords" content="xss">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【翻旧账】XSS姿势日常学习">
 <meta property="og:url" content="http://am4zing.me/2019/03/26/【翻旧账】XSS姿势日常学习/index.html">
 <meta property="og:site_name" content="am4zing·wang2ha">
-<meta property="og:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+<meta property="og:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有看到，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以尝试">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/06/59366445d1bf9.png">
@@ -22,10 +22,10 @@
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a0414b45c5.png">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a063b7fc7b.png">
 <meta property="og:image" content="https://ooo.0o0.ooo/2017/06/09/593a069481a55.png">
-<meta property="og:updated_time" content="2019-03-26T01:26:29.845Z">
+<meta property="og:updated_time" content="2019-03-27T01:42:50.025Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【翻旧账】XSS姿势日常学习">
-<meta name="twitter:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以">
+<meta name="twitter:description" content="## 0×01 叉插×看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路. 这篇文章自己放在文件夹的最底层，竟然没有看到，尴尬……直到今天还是被我发现了。 ### example-1修改自己的简历信息，用户名限制了50的长度  过滤了一些标签，img标签没有被过滤，所以尝试">
 <meta name="twitter:image" content="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png">
     
     
@@ -84,10 +84,8 @@
     <span id="actions">
       <ul>
         
-        <li><a class="icon" href="/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
-        
-        <li><a class="icon" href="/2019/03/14/降级安装jre/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" href="/2019/03/26/【翻旧账】XSS姿势日常学习POST/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -154,7 +152,7 @@
 
   <div class="content" itemprop="articleBody">
     <h2 id="0×01-叉插×"><a href="#0×01-叉插×" class="headerlink" title="## 0×01 叉插×"></a>## 0×01 叉插×</h2><p>看到P牛博客里有一篇wooyun的《那些年我们没能bypass的XSS filter》, 想整理过来但是好像也并没有必要这么做，先印象笔记搞一波，然后自己慢慢积累一些思路和套路.</p>
-<p>这篇文章自己放在文件夹的最底层，竟然没有整理出来，尴尬……直到今天还是被我发现了。</p>
+<p>这篇文章自己放在文件夹的最底层，竟然没有看到，尴尬……直到今天还是被我发现了。</p>
 <h3 id="example-1"><a href="#example-1" class="headerlink" title="### example-1"></a>### example-1</h3><p>修改自己的简历信息，用户名限制了50的长度</p>
 <p><img src="https://ooo.0o0.ooo/2017/06/06/59366445b7a5d.png" alt="2017060501.png"></p>
 <p>过滤了一些标签，img标签没有被过滤，所以尝试插入，查看源码的时候发现插入的英文标点符号被替换为了中文的，所以普通的姿势应该是搞不定的了，换个地方搞，特此记录.</p>
