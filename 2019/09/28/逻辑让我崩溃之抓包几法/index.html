@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="#0x00 日常BB文章首发是在先知社区“逻辑让我崩溃之日常APP抓包几法” 还是把自己平时发现的，自认为有点意思的点罗列出来，班门弄斧，师傅们别笑话→.→ 本次想分享的是关于自己遇到的一些关于app测试抓包遇到几种状况，同时也看到好多身边的小伙伴很多时候根本不会折腾这些方式，另外自己暂且还没有将技术探究到多深入，希望文中的点能让人有所可用。 #0x01 关于代理 首先，通过一张图我们可以看到我们">
+<meta name="keywords" content="抓包技巧">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逻辑让我崩溃之日常APP抓包几法">
+<meta property="og:url" content="http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="#0x00 日常BB文章首发是在先知社区“逻辑让我崩溃之日常APP抓包几法” 还是把自己平时发现的，自认为有点意思的点罗列出来，班门弄斧，师傅们别笑话→.→ 本次想分享的是关于自己遇到的一些关于app测试抓包遇到几种状况，同时也看到好多身边的小伙伴很多时候根本不会折腾这些方式，另外自己暂且还没有将技术探究到多深入，希望文中的点能让人有所可用。 #0x01 关于代理 首先，通过一张图我们可以看到我们">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153334-c33354c8-ed8b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153359-d220fa30-ed8b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153415-db85d604-ed8b-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013154924-f9c0668c-ed8d-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153529-0820de8e-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153607-1e4b0ef0-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153644-347ce20c-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153700-3ddc7466-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153721-4ab06ac6-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153824-70540418-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153808-66b8bdc2-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013154814-cfce6d9c-ed8d-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153906-8926c282-ed8c-1.png">
+<meta property="og:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013155134-474ac2a8-ed8e-1.png">
+<meta property="og:updated_time" content="2019-10-20T02:39:44.328Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="逻辑让我崩溃之日常APP抓包几法">
+<meta name="twitter:description" content="#0x00 日常BB文章首发是在先知社区“逻辑让我崩溃之日常APP抓包几法” 还是把自己平时发现的，自认为有点意思的点罗列出来，班门弄斧，师傅们别笑话→.→ 本次想分享的是关于自己遇到的一些关于app测试抓包遇到几种状况，同时也看到好多身边的小伙伴很多时候根本不会折腾这些方式，另外自己暂且还没有将技术探究到多深入，希望文中的点能让人有所可用。 #0x01 关于代理 首先，通过一张图我们可以看到我们">
+<meta name="twitter:image" content="https://xzfile.aliyuncs.com/media/upload/picture/20191013153334-c33354c8-ed8b-1.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>逻辑让我崩溃之日常APP抓包几法</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/10/16/AWVS12统一面板管理+多引擎Multi-engine - Docker版/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/08/Docker日常命令/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&text=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&is_video=false&description=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逻辑让我崩溃之日常APP抓包几法&body=Check out this article: http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&name=逻辑让我崩溃之日常APP抓包几法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-日常BB"><span class="toc-number">1.</span> <span class="toc-text">#0x00 日常BB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-关于代理"><span class="toc-number">2.</span> <span class="toc-text">#0x01 关于代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-借助框架-amp-模块"><span class="toc-number">3.</span> <span class="toc-text">#0x02 借助框架&amp;模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Xposed-JustTrustMe"><span class="toc-number">3.1.</span> <span class="toc-text">1. Xposed -  JustTrustMe</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-模块原理"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.1 模块原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-使用方法"><span class="toc-number">3.1.2.</span> <span class="toc-text">1.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-案例演示"><span class="toc-number">3.1.3.</span> <span class="toc-text">1.3 案例演示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Xposed-SSLUnPinning"><span class="toc-number">3.2.</span> <span class="toc-text">2. Xposed - SSLUnPinning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-模块原理"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.1 模块原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-使用方法"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-案例演示"><span class="toc-number">3.2.3.</span> <span class="toc-text">2.3 案例演示</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-借助代理软件"><span class="toc-number">4.</span> <span class="toc-text">0x02 借助代理软件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-用proxifier说话"><span class="toc-number">4.1.</span> <span class="toc-text">1. 用proxifier说话</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-是否功能够用"><span class="toc-number">4.1.1.</span> <span class="toc-text">1.1 是否功能够用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-原理"><span class="toc-number">4.1.2.</span> <span class="toc-text">1.2 原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-实例一下"><span class="toc-number">4.1.3.</span> <span class="toc-text">1.3 实例一下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-使用方法"><span class="toc-number">4.1.4.</span> <span class="toc-text">1.4 使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-Windows-夜神-Proxifier"><span class="toc-number">4.1.4.1.</span> <span class="toc-text">1.4.1 Windows 夜神 + Proxifier</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-mac-夜神-Genymotion-Proxifier"><span class="toc-number">4.1.4.2.</span> <span class="toc-text">1.4.2 mac 夜神/Genymotion + Proxifier</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-借助“虚拟机”"><span class="toc-number">5.</span> <span class="toc-text">0x03 借助“虚拟机”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-功能是否够用"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.1 功能是否够用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-使用方法-1"><span class="toc-number">5.0.2.</span> <span class="toc-text">1.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-几点注意"><span class="toc-number">5.0.3.</span> <span class="toc-text">1.3 几点注意</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-扩展一点"><span class="toc-number">6.</span> <span class="toc-text">0x04 扩展一点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-边抓包测试边被动扫描"><span class="toc-number">6.1.</span> <span class="toc-text">1.1 边抓包测试边被动扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-burp插件和xray"><span class="toc-number">6.2.</span> <span class="toc-text">1.2 burp插件和xray</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x05-参考"><span class="toc-number">7.</span> <span class="toc-text">0x05 参考</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        逻辑让我崩溃之日常APP抓包几法
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-09-27T16:00:00.000Z" itemprop="datePublished">2019-09-28</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/抓包技巧/">抓包技巧</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h1 id="0x00-日常BB"><a href="#0x00-日常BB" class="headerlink" title="#0x00 日常BB"></a>#0x00 日常BB</h1><p>文章首发是在先知社区<a href="https://xz.aliyun.com/t/6558" target="_blank" rel="noopener">“逻辑让我崩溃之日常APP抓包几法”</a></p>
+<p>还是把自己平时发现的，自认为有点意思的点罗列出来，班门弄斧，师傅们别笑话→.→</p>
+<p>本次想分享的是关于自己遇到的一些关于app测试抓包遇到几种状况，同时也看到好多身边的小伙伴很多时候根本不会折腾这些方式，另外自己暂且还没有将技术探究到多深入，希望文中的点能让人有所可用。</p>
+<h1 id="0x01-关于代理"><a href="#0x01-关于代理" class="headerlink" title="#0x01 关于代理"></a>#0x01 关于代理</h1><p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153334-c33354c8-ed8b-1.png" alt="代理原理1"></p>
+<p>首先，通过一张图我们可以看到我们日常抓包一直说的“设置代理”，“走代理”到底对于C/S或者B/S的交互来说意味着什么，扮演了什么样的角色。</p>
+<p>接着，我们设置代理之后，通过导入证书之类的操作之后就可以抓到http、部分https的包了。我尝试用两张图来直观展示代理软件证书的作用(此处是导入burpsuite证书)，浏览器导入证书之后访问网站的情况截图，其实这中间涉及到ssl的一些点，我把参考文章放到了最后，有需要的可以看下具体的认证过程，如下图所示：</p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153359-d220fa30-ed8b-1.png" alt="抓包原理1"></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153415-db85d604-ed8b-1.png" alt="抓包原理2"></p>
+<p>那么测试过程中有一些情况是只“导证书、设代理”这些是不够的，需要在借助一些其他工具或者使用其他方式的。我们说说这些情况下我们可以做些什么突破或绕过限制：</p>
+<h1 id="0x02-借助框架-amp-模块"><a href="#0x02-借助框架-amp-模块" class="headerlink" title="#0x02 借助框架&amp;模块"></a>#0x02 借助框架&amp;模块</h1><h2 id="1-Xposed-JustTrustMe"><a href="#1-Xposed-JustTrustMe" class="headerlink" title="1. Xposed -  JustTrustMe"></a>1. Xposed -  JustTrustMe</h2><p>如本标题所言，just trust me，我们自然要说的就是xposed的一个好用的模块<a href="https://github.com/Fuzion24/JustTrustMe" target="_blank" rel="noopener">JustTrustMe</a></p>
+<h3 id="1-1-模块原理"><a href="#1-1-模块原理" class="headerlink" title="1.1 模块原理"></a>1.1 模块原理</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**Point: disable**</span><br><span class="line"></span><br><span class="line">An xposed module that disables SSL certificate checking for the purposes of auditing an app with cert pinning</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-使用方法"><a href="#1-2-使用方法" class="headerlink" title="1.2 使用方法"></a>1.2 使用方法</h3><p>使用的话已经有特别多的文章介绍使用，以夜神的安卓模拟器为例，也就只需要我们做几个简单的操作：</p>
+<ol>
+<li>安装夜神模拟器；</li>
+<li>安装xpose框架；</li>
+<li>安装<a href="https://github.com/Fuzion24/JustTrustMe" target="_blank" rel="noopener">JustTrustMe</a>；</li>
+<li>激活<a href="https://github.com/Fuzion24/JustTrustMe" target="_blank" rel="noopener">JustTrustMe</a>模块；</li>
+<li>操作结束；</li>
+</ol>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013154924-f9c0668c-ed8d-1.png" alt=""></p>
+<h3 id="1-3-案例演示"><a href="#1-3-案例演示" class="headerlink" title="1.3 案例演示"></a>1.3 案例演示</h3><p>你可以随便找一个常用APP测试即可，有很多部分App是使用此框架和模块后即可抓到包了。</p>
+<h2 id="2-Xposed-SSLUnPinning"><a href="#2-Xposed-SSLUnPinning" class="headerlink" title="2. Xposed - SSLUnPinning"></a>2. Xposed - SSLUnPinning</h2><p>与JustTrustMe类似的，<a href="https://github.com/ac-pm/SSLUnpinning_Xposed" target="_blank" rel="noopener">SSLUnPinning</a>自然针对SSLPinning而生，他也是Xpose下的一个模块。</p>
+<h3 id="2-1-模块原理"><a href="#2-1-模块原理" class="headerlink" title="2.1 模块原理"></a>2.1 模块原理</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">**Point: bypass**</span><br><span class="line"></span><br><span class="line">Android Xposed Module to bypass SSL certificate validation (Certificate Pinning).</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-使用方法"><a href="#2-2-使用方法" class="headerlink" title="2.2 使用方法"></a>2.2 使用方法</h3><p>在安装xposed之后</p>
+<ol>
+<li>安装<a href="https://github.com/ac-pm/SSLUnpinning_Xposed" target="_blank" rel="noopener">SSLUnPinning</a>；</li>
+<li>激活<a href="https://github.com/ac-pm/SSLUnpinning_Xposed" target="_blank" rel="noopener">SSLUnPinning</a>模块；</li>
+</ol>
+<h3 id="2-3-案例演示"><a href="#2-3-案例演示" class="headerlink" title="2.3 案例演示"></a>2.3 案例演示</h3><p>结合上面的justtrustme模块使用，效果很好。</p>
+<h1 id="0x02-借助代理软件"><a href="#0x02-借助代理软件" class="headerlink" title="0x02 借助代理软件"></a>0x02 借助代理软件</h1><p>这里的代理软件指的场景是结合安卓模拟器，不在模拟器本地设置代理，通过宿主机将模拟器流量全部代理到抓包软件的方式。</p>
+<h2 id="1-用proxifier说话"><a href="#1-用proxifier说话" class="headerlink" title="1. 用proxifier说话"></a>1. 用proxifier说话</h2><h3 id="1-1-是否功能够用"><a href="#1-1-是否功能够用" class="headerlink" title="1.1 是否功能够用"></a>1.1 是否功能够用</h3><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Proxifier是一款功能非常强大的socks5客户端，可以让不支持通过代理服务器工作的网络程序能通过HTTPS或SOCKS代理或代理链。</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-原理"><a href="#1-2-原理" class="headerlink" title="1.2 原理"></a>1.2 原理</h3><p>Proxifier可以通过设置，将进程流量定向到特定的代理，简单说就是可以全局走代理，也可以单独进行走单独代理。网上文章倒是有不少。我想要说的就是针对模拟器不能设代理的问题，将夜神的流量代理到抓包软件去。</p>
+<h3 id="1-3-实例一下"><a href="#1-3-实例一下" class="headerlink" title="1.3 实例一下"></a>1.3 实例一下</h3><p>你应该见到过这几种提示吧？</p>
+<p><strong>“XXX请检查是否设置代理”</strong><br><strong>“XXX已停止运行”</strong></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153529-0820de8e-ed8c-1.png" alt="已停止运行"></p>
+<p>应用运行检测本地是否设置代理，并终止应用运行，说白了就是不允许本机设置代理运行。OK，fine，那就不设置代理了呗。这时候Proxifier不就正好派上用场了么。</p>
+<h3 id="1-4-使用方法"><a href="#1-4-使用方法" class="headerlink" title="1.4 使用方法"></a>1.4 使用方法</h3><h4 id="1-4-1-Windows-夜神-Proxifier"><a href="#1-4-1-Windows-夜神-Proxifier" class="headerlink" title="1.4.1 Windows 夜神 + Proxifier"></a>1.4.1 Windows 夜神 + Proxifier</h4><ul>
+<li>找准进程</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153607-1e4b0ef0-ed8c-1.png" alt="windows夜神1"></p>
+<ul>
+<li>设置proxy</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153644-347ce20c-ed8c-1.png" alt="windows夜神2"></p>
+<ul>
+<li>设置rules</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153700-3ddc7466-ed8c-1.png" alt="windows夜神3"></p>
+<ul>
+<li>验证结果</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153721-4ab06ac6-ed8c-1.png" alt="windows夜神4"></p>
+<h4 id="1-4-2-mac-夜神-Genymotion-Proxifier"><a href="#1-4-2-mac-夜神-Genymotion-Proxifier" class="headerlink" title="1.4.2 mac 夜神/Genymotion + Proxifier"></a>1.4.2 mac 夜神/Genymotion + Proxifier</h4><p>试了一下，Mac下不管是夜神还是Genymotion都是同一个进程。</p>
+<ul>
+<li>找准进程</li>
+</ul>
+<p><strong>找了半天，中间像下面的图中看到的，一直设置进程为“Nox Player”，其实mac下的进程添加的时候应该是VBoxHeadless</strong></p>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153824-70540418-ed8c-1.png" alt="Mac夜神1"></p>
+<ul>
+<li>设置proxy</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153808-66b8bdc2-ed8c-1.png" alt="Mac夜神2"></p>
+<ul>
+<li>设置rules</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013154814-cfce6d9c-ed8d-1.png" alt="Mac夜神3"></p>
+<ul>
+<li>验证结果</li>
+</ul>
+<p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013153906-8926c282-ed8c-1.png" alt="Mac夜神4"></p>
+<h1 id="0x03-借助“虚拟机”"><a href="#0x03-借助“虚拟机”" class="headerlink" title="0x03 借助“虚拟机”"></a>0x03 借助“虚拟机”</h1><p>那，如果应用App运行时不允许在模拟器运行，直接终止运行咋个办，那你可以试试虚拟机了，也就是<a href="https://github.com/android-hacker/VirtualXposed" target="_blank" rel="noopener">VirtualXposed</a></p>
+<h3 id="1-1-功能是否够用"><a href="#1-1-功能是否够用" class="headerlink" title="1.1 功能是否够用"></a>1.1 功能是否够用</h3><p><img src="https://xzfile.aliyuncs.com/media/upload/picture/20191013155134-474ac2a8-ed8e-1.png" alt="virtualxposed1"></p>
+<p>VirtualXposed一开始应该是为了让像我一样的不想刷Xpose、获取root一顿操作的懒人设计的，像图中看到的克隆应用等功能，或者是真实物理机双开应用。模拟了一个虚拟环境，其中还运行着Xpose，还有自己可以安装其他模块。</p>
+<p>对于测试而言，正好应用于众多应用App模拟器不允许运行的状况，VirtualXposed内运行应用，手机设置代理，避免了模拟器运行的检测，同时可以设置代理进行抓包测试。</p>
+<h3 id="1-2-使用方法-1"><a href="#1-2-使用方法-1" class="headerlink" title="1.2 使用方法"></a>1.2 使用方法</h3><p>傻瓜式操作，所有功能大概一看就知道了。</p>
+<h3 id="1-3-几点注意"><a href="#1-3-几点注意" class="headerlink" title="1.3 几点注意"></a>1.3 几点注意</h3><ul>
+<li>同一版本VirtualXposed，不同Android版本运行会直接影响是否可以抓到包</li>
+</ul>
+<blockquote>
+<p>某次测试中，Android6以上机子使用VirtualXposed抓不到包，我Android6的红米note3可以</p>
+</blockquote>
+<ul>
+<li>同一Android，不同版本VirtualXposed影响一些Xpose module是否可以运行(不排除是因为我的Android6版本低了)</li>
+</ul>
+<blockquote>
+<p>某次测试中，装了高版本的VirtualXposed导致Xpose module运行出现bug，无法脱掉App的壳儿，换了低版本的VirtualXposed可以。</p>
+</blockquote>
+<ul>
+<li>不用Android版本、不同版本VirtualXposed、不同xpose module开发时间，将这三者不同的方式组合可能会因为兼容性等问题导致运行不畅、不能抓包的问题，得折腾折腾</li>
+</ul>
+<h1 id="0x04-扩展一点"><a href="#0x04-扩展一点" class="headerlink" title="0x04 扩展一点"></a>0x04 扩展一点</h1><h2 id="1-1-边抓包测试边被动扫描"><a href="#1-1-边抓包测试边被动扫描" class="headerlink" title="1.1 边抓包测试边被动扫描"></a>1.1 边抓包测试边被动扫描</h2><p>这么长时间，被动扫描这么好的方式，可以结合在我们的抓包过程，</p>
+<ul>
+<li><p>配合burpsuite插件passive-scan-client，将流量也全部抓发到chaitin的xray或者其他被动扫描服务</p>
+</li>
+<li><p>将Proxifier代理出的流量直接全部代理到xray进行扫描，毕竟Proxifier相当好用</p>
+</li>
+</ul>
+<h2 id="1-2-burp插件和xray"><a href="#1-2-burp插件和xray" class="headerlink" title="1.2 burp插件和xray"></a>1.2 burp插件和xray</h2><ul>
+<li><a href="https://github.com/c0ny1/passive-scan-client.git" target="_blank" rel="noopener">burpsuite 插件passive-scan-client</a></li>
+<li><a href="https://github.com/chaitin/xray" target="_blank" rel="noopener">chaitin x-ray</a></li>
+</ul>
+<h1 id="0x05-参考"><a href="#0x05-参考" class="headerlink" title="0x05 参考"></a>0x05 参考</h1><ul>
+<li><a href="http://www.h3c.com/cn/d_200812/622834_30003_0.htm#_Toc212542722" target="_blank" rel="noopener">SSL技术白皮书</a></li>
+<li><a href="https://www.jianshu.com/p/c03f47e7b9de" target="_blank" rel="noopener">HTTPS与SSL</a></li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#0x00-日常BB"><span class="toc-number">1.</span> <span class="toc-text">#0x00 日常BB</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x01-关于代理"><span class="toc-number">2.</span> <span class="toc-text">#0x01 关于代理</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-借助框架-amp-模块"><span class="toc-number">3.</span> <span class="toc-text">#0x02 借助框架&amp;模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Xposed-JustTrustMe"><span class="toc-number">3.1.</span> <span class="toc-text">1. Xposed -  JustTrustMe</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-模块原理"><span class="toc-number">3.1.1.</span> <span class="toc-text">1.1 模块原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-使用方法"><span class="toc-number">3.1.2.</span> <span class="toc-text">1.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-案例演示"><span class="toc-number">3.1.3.</span> <span class="toc-text">1.3 案例演示</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Xposed-SSLUnPinning"><span class="toc-number">3.2.</span> <span class="toc-text">2. Xposed - SSLUnPinning</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-模块原理"><span class="toc-number">3.2.1.</span> <span class="toc-text">2.1 模块原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-使用方法"><span class="toc-number">3.2.2.</span> <span class="toc-text">2.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-案例演示"><span class="toc-number">3.2.3.</span> <span class="toc-text">2.3 案例演示</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x02-借助代理软件"><span class="toc-number">4.</span> <span class="toc-text">0x02 借助代理软件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-用proxifier说话"><span class="toc-number">4.1.</span> <span class="toc-text">1. 用proxifier说话</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-是否功能够用"><span class="toc-number">4.1.1.</span> <span class="toc-text">1.1 是否功能够用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-原理"><span class="toc-number">4.1.2.</span> <span class="toc-text">1.2 原理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-实例一下"><span class="toc-number">4.1.3.</span> <span class="toc-text">1.3 实例一下</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-使用方法"><span class="toc-number">4.1.4.</span> <span class="toc-text">1.4 使用方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-Windows-夜神-Proxifier"><span class="toc-number">4.1.4.1.</span> <span class="toc-text">1.4.1 Windows 夜神 + Proxifier</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-mac-夜神-Genymotion-Proxifier"><span class="toc-number">4.1.4.2.</span> <span class="toc-text">1.4.2 mac 夜神/Genymotion + Proxifier</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x03-借助“虚拟机”"><span class="toc-number">5.</span> <span class="toc-text">0x03 借助“虚拟机”</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-功能是否够用"><span class="toc-number">5.0.1.</span> <span class="toc-text">1.1 功能是否够用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-使用方法-1"><span class="toc-number">5.0.2.</span> <span class="toc-text">1.2 使用方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-几点注意"><span class="toc-number">5.0.3.</span> <span class="toc-text">1.3 几点注意</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x04-扩展一点"><span class="toc-number">6.</span> <span class="toc-text">0x04 扩展一点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-边抓包测试边被动扫描"><span class="toc-number">6.1.</span> <span class="toc-text">1.1 边抓包测试边被动扫描</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-burp插件和xray"><span class="toc-number">6.2.</span> <span class="toc-text">1.2 burp插件和xray</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#0x05-参考"><span class="toc-number">7.</span> <span class="toc-text">0x05 参考</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&text=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&is_video=false&description=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=逻辑让我崩溃之日常APP抓包几法&body=Check out this article: http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&title=逻辑让我崩溃之日常APP抓包几法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/09/28/逻辑让我崩溃之抓包几法/&name=逻辑让我崩溃之日常APP抓包几法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2019 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
