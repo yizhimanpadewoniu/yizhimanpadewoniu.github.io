@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="description" content="## 0x01 过程 telnet smtp.163.com 25//注释：指定连接的邮箱服务器及端口号，mail默认port为25  helo localhost// 注释：helo 向服务器发出标志自己身份的命令  auth login// 注释： auth login 登录命令，依次输入base64编码后的用户名、密码  mail from:&amp;#x79;&amp;#x6f;&amp;#x75;&amp;#x72;&amp;">
+<meta name="keywords" content="邮件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用telnet发送测试邮件">
+<meta property="og:url" content="http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/index.html">
+<meta property="og:site_name" content="am4zing·wang2ha">
+<meta property="og:description" content="## 0x01 过程 telnet smtp.163.com 25//注释：指定连接的邮箱服务器及端口号，mail默认port为25  helo localhost// 注释：helo 向服务器发出标志自己身份的命令  auth login// 注释： auth login 登录命令，依次输入base64编码后的用户名、密码  mail from:&amp;#x79;&amp;#x6f;&amp;#x75;&amp;#x72;&amp;">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2020-01-19T13:40:23.337Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="使用telnet发送测试邮件">
+<meta name="twitter:description" content="## 0x01 过程 telnet smtp.163.com 25//注释：指定连接的邮箱服务器及端口号，mail默认port为25  helo localhost// 注释：helo 向服务器发出标志自己身份的命令  auth login// 注释： auth login 登录命令，依次输入base64编码后的用户名、密码  mail from:&amp;#x79;&amp;#x6f;&amp;#x75;&amp;#x72;&amp;">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>使用telnet发送测试邮件</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2019/08/19/Docker私有仓库/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2019/07/08/Docker日常命令/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&text=使用telnet发送测试邮件"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&is_video=false&description=使用telnet发送测试邮件"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用telnet发送测试邮件&body=Check out this article: http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&name=使用telnet发送测试邮件&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-过程"><span class="toc-number">1.</span> <span class="toc-text">## 0x01 过程</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index my4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        使用telnet发送测试邮件
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">am4zing·wang2ha</span>
+      </span>
+      
+    <div class="postdate">
+        <time datetime="2019-07-10T16:00:00.000Z" itemprop="datePublished">2019-07-11</time>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/邮件/">邮件</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h2 id="0x01-过程"><a href="#0x01-过程" class="headerlink" title="## 0x01 过程"></a>## 0x01 过程</h2><ul>
+<li><p>telnet smtp.163.com 25<br>//注释：指定连接的邮箱服务器及端口号，mail默认port为25</p>
+</li>
+<li><p>helo localhost<br>// 注释：helo 向服务器发出标志自己身份的命令</p>
+</li>
+<li><p>auth login<br>// 注释： auth login 登录命令，依次输入base64编码后的用户名、密码</p>
+</li>
+<li><p>mail from:<a href="mailto:&#x79;&#x6f;&#x75;&#x72;&#109;&#97;&#x69;&#108;&#110;&#97;&#x6d;&#x65;&#64;&#49;&#x36;&#x33;&#46;&#99;&#x6f;&#x6d;" target="_blank" rel="noopener">&#x79;&#x6f;&#x75;&#x72;&#109;&#97;&#x69;&#108;&#110;&#97;&#x6d;&#x65;&#64;&#49;&#x36;&#x33;&#46;&#99;&#x6f;&#x6d;</a><br>250 Mail OK // 注释：邮件发送者</p>
+</li>
+<li><p>rcpt to:<a href="mailto:&#x64;&#x73;&#116;&#109;&#x61;&#105;&#x6c;&#x6e;&#x61;&#x6d;&#101;&#x40;&#49;&#54;&#x33;&#x2e;&#99;&#111;&#109;" target="_blank" rel="noopener">&#x64;&#x73;&#116;&#109;&#x61;&#105;&#x6c;&#x6e;&#x61;&#x6d;&#101;&#x40;&#49;&#54;&#x33;&#x2e;&#99;&#111;&#109;</a><br>250 Mail OK // 注释：邮件接收者</p>
+</li>
+<li><p>data<br>// 注释：data命令开始书写邮件内容</p>
+<p>to:<a href="mailto:dstmailname@163.com" target="_blank" rel="noopener">dstmailname@163.com</a> // 注释：收件人邮箱跟上文保持一致</p>
+<p>from:<a href="mailto:yourmailname@163.com" target="_blank" rel="noopener">yourmailname@163.com</a> // 注释：发件人邮箱跟上文保持一致 这里好像不能造假了，测试了多次被退回</p>
+<p>subject:test mail // 注释：邮件主体</p>
+<p>//空一行</p>
+<p>This is a test mail…. // 注释：正文内容</p>
+<p>//空一行</p>
+</li>
+<li><p>.<br>// 注释：&lt;点&gt;+&lt;回车&gt; 正文内容结束标志</p>
+</li>
+</ul>
+<p>250 Mail OK queued as smtp12,EMCowABnovABxQ1XZjKTAQ–.7259S2 1460520311</p>
+<ul>
+<li>quit<br>// 注释：退出</li>
+</ul>
+
+  </div>
+</article>
+
+    <div class="blog-post-comments">
+        <div id="disqus_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+
+    </div>
+    
+      <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#0x01-过程"><span class="toc-number">1.</span> <span class="toc-text">## 0x01 过程</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&text=使用telnet发送测试邮件"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&is_video=false&description=使用telnet发送测试邮件"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=使用telnet发送测试邮件&body=Check out this article: http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&title=使用telnet发送测试邮件"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://am4zing.me/2019/07/11/使用Telnet发送测试邮件/&name=使用telnet发送测试邮件&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+    
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy; 2020 Wanghaha
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">首页</a></li>
+         
+          <li><a href="/about/">关于</a></li>
+         
+          <li><a href="/archives/">归档</a></li>
+         
+          <li><a href="/Search/">搜索</a></li>
+         
+          <li><a href="https://github.com/yizhimanpadewoniu">项目</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+  <!-- 不蒜子 -->
+  <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  <span id="busuanzi_container_site_uv">
+    访客数<span id="busuanzi_value_site_uv"></span>次
+  </span>
+  <!-- 不蒜子 -->
+</footer>
+
+</body>
+</html>
+<!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/fontawesome-all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+<!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+    <script type="text/javascript">
+        (function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-86660611-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+    <script type="text/javascript">
+        var disqus_shortname = 'bbjs_byd';
+
+        (function(){
+            var dsq = document.createElement('script');
+            dsq.type = 'text/javascript';
+            dsq.async = true;
+            dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        }());
+    </script>
+
+
